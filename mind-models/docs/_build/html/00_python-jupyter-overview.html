@@ -1,0 +1,856 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Models of the Mind, 2024 &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '00_python-jupyter-overview';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Conway’s “Game of Life”" href="01_game-of-life.html" />
+    <link rel="prev" title="models-of-the-mind-notebooks" href="README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="My sample book - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    models-of-the-mind-notebooks
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Models of the Mind, 2024</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01_game-of-life.html">Conway’s “Game of Life”</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="02a_math-probability-matching.html"><font color="red">LAB REPORT</font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02b_math-probability-matching.html">PROBABILITY MATCHING, PART 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_agent-probability-matching.html">PROBABILITY MATCHING, PART 3</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="04_probability-review.html">Preliminaries: Understanding Logical Symbols in Probability</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem-rev.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_pseudo-swr-analysis.html">More on mathematical models: Statistical models</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="07_swr-bayes-004.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="08_trace-swr.html">Implementations of the TRACE model</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="10_netsci-01.html">Network Science Overview</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="11_nnets-01-linear-functions-and-bias.html">Neural networks, Part 1: Linear logic functions as networks</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="12_nnets-02-training-linear-networks.html">Neural networks, Part 2 – training networks</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="13_nnets-03-learning-xor.html">Neural networks, Part 3 – training networks for non-linearly separable mappings</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="14_nnets-04-srn-statlearn.html">Neural networks, Part 4</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F00_python-jupyter-overview.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/00_python-jupyter-overview.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Models of the Mind, 2024</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Models of the Mind, 2024</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-jupyter-notebooks-and-python">INTRODUCTION TO JUPYTER NOTEBOOKS AND PYTHON</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-notebooks">How to run notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-can-you-do-with-a-notebook">What can you do with a notebook?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-try-some-examples"><em>Let’s try some examples.</em></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-python">Exploring Python</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-tour-of-python">A quick tour of Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-ways-to-use-python">Different ways to use Python</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-and-markdown-resources">Jupyter and Markdown resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-exercise-5-10-mins">Optional exercise (5-10 mins)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#that-s-it-for-now-we-will-discuss-additional-details-in-class">That’s it for now! We will discuss additional details in class.</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="models-of-the-mind-2024">
+<h1>Models of the Mind, 2024<a class="headerlink" href="#models-of-the-mind-2024" title="Link to this heading">#</a></h1>
+<section id="introduction-to-jupyter-notebooks-and-python">
+<h2>INTRODUCTION TO JUPYTER NOTEBOOKS AND PYTHON<a class="headerlink" href="#introduction-to-jupyter-notebooks-and-python" title="Link to this heading">#</a></h2>
+<p><em>Inspired by a similar notebook used at BCBL for incoming MSc students developed by Martin Cooke</em></p>
+<hr class="docutils" />
+<p>This webpage is a <em>Jupyter</em> notebook. We can have sections with text, written in <em>Markdown</em>, a simple markup language that allows rapid conversion from text to a rendered form (e.g., html). We can also have segments with code that you can run and modify.</p>
+</section>
+<section id="how-to-run-notebooks">
+<h2>How to run notebooks<a class="headerlink" href="#how-to-run-notebooks" title="Link to this heading">#</a></h2>
+<p>There are various platforms you can use to run and edit Jupyter notebooks. You can run them locally on your own computer, by putting the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> notebook file(s) in a directory, installing <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code> on your computer, and then calling <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code> from the directory where the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> files are. Alternatively, you can put the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> files on google drive. Then if you double-click them (or open them from the menu), they will open in <strong>google colaboratory</strong> (colab). However, many of the notebooks for this course will not run in colab because they depend on graphics packages not yet available in colab.</p>
+</section>
+<section id="what-can-you-do-with-a-notebook">
+<h2>What can you do with a notebook?<a class="headerlink" href="#what-can-you-do-with-a-notebook" title="Link to this heading">#</a></h2>
+<p>A note book consists of a series of <strong>cells</strong>. A cell is a place where you can enter either <strong>code</strong> or <strong>markdown</strong> text. Code can be executed, while markdown is rendered. In Jupyter, there is a ‘play’ icon at the top of the window that you use to execute either kind of cell. It looks like this: ▶</p>
+<p>Jupyter provides ‘kernels’ There are over 100 programming language kernels supported in Jupyter lab. We will focus on Python, and may use the statistical programming language <code class="docutils literal notranslate"><span class="pre">R</span></code>. Normally, you select one kernel for a notebook (e.g., <em>either</em> Python or R). If you want to use both within a notebook, there are ways to do it, but we will skip this for now.</p>
+<p>We will also occasionally use Jupyter ‘directives’ within notebooks to do special tasks (such as installing or loading packages, or loading data from an external source). While your Python and R code should run if you put it to a standard script outside the notebook, Jupyter directives will not.</p>
+<p>If you are looking at notebooks on a course <code class="docutils literal notranslate"><span class="pre">Binder</span></code> link, you can run things, and you can save things – but only <strong>temporarily</strong>. If you want to save your work after your session, you have to download it. You can upload it again when you re-open the binder link. However you are working, if you are changing things, save frequently within a session so you do not lose anything if you get disconnected, and save anything you have changed and want to keep <strong>to your local computer</strong> before you leave the session. Otherwise, that work will be irrevocably lost.</p>
+<p><strong>Note:</strong> <em>In 2023, binder stopped working reliably. For now, my advice remains to copy the github repository to your own machine, install jupyter, and work with local copies of the course file. This is still true in August, 2024.</em></p>
+</section>
+<hr class="docutils" />
+<section id="let-s-try-some-examples">
+<h2><em>Let’s try some examples.</em><a class="headerlink" href="#let-s-try-some-examples" title="Link to this heading">#</a></h2>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exploring-python">
+<h1>Exploring Python<a class="headerlink" href="#exploring-python" title="Link to this heading">#</a></h1>
+<p>Remember, you have access to DataCamp online tutorials through this course. See the course website for details.</p>
+<section id="a-quick-tour-of-python">
+<h2>A quick tour of Python<a class="headerlink" href="#a-quick-tour-of-python" title="Link to this heading">#</a></h2>
+<p>Python is an <em>interpreted</em> language. This is in contrast to a compiled language (such as C). When you use a compiled language, you first compile a script (which converts the code to fast machine code), which you then run as an executable file. If there are problems, you have to edit the file and recompile.</p>
+<p>In an interpreted language (like Python or R), machine code conversion happens on the fly, allowing you to interact with the interpreter, run a single line of code (or entire blocks at once), and change things within a session. This means you can use it in an exploratory way to get immediate results. Let’s look at some examples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># On a single line, anything to the right of a &#39;#&#39; is a comment, and ignored by</span>
+<span class="c1"># the interpreter. This allows you to make notes explaining what your code is </span>
+<span class="c1"># meant to do, etc.</span>
+
+<span class="c1"># You can use it like a calculator -- press the play icon (▶) to execute</span>
+<span class="mi">2</span><span class="o">+</span><span class="mi">3</span> <span class="c1"># this is also a comment</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can set a variable value and print it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="c1"># set a to 4 -- note that this is a comment! The interpreter ignores everything after &#39;#&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># slightly complex way to print</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># slightly more complex way to print -- can you guess what this does? the last &#39;f&#39; means floating point</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The value of a is </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># the leading &#39;f&#39; allows you to mix with text</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4
+4
+4.000
+The value of a is 4
+</pre></div>
+</div>
+</div>
+</div>
+<p>Python infers the variable type by the precision you use (or the precision of a value you assign to a variable). So <code class="docutils literal notranslate"><span class="pre">a=1</span></code> implies an integer, while <code class="docutils literal notranslate"><span class="pre">a=1.1</span></code> (or <code class="docutils literal notranslate"><span class="pre">a=1.0</span></code>) implies a floating point number. Also, we can see that the kernel knows the value of <code class="docutils literal notranslate"><span class="pre">a</span></code> that we just set above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># one float makes x a float</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;a=</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">, x=</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">, a * x = </span><span class="si">{</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a=4, x=3.0, a * x = 12.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># it supports string operations in a natural way; do you understand what this does?</span>
+<span class="s1">&#39;good&#39;</span> <span class="ow">in</span> <span class="s1">&#39;every good boy does fine&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can create useful structures to store information, like this &#39;dictionary&#39;</span>
+<span class="n">email</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;jim&#39;</span><span class="p">:</span> <span class="s1">&#39;j.magnuson@faux.org&#39;</span><span class="p">,</span> <span class="s1">&#39;charlie&#39;</span><span class="p">:</span> <span class="s1">&#39;cdaniels@fauxfiddle.com&#39;</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">email</span><span class="p">[</span><span class="s1">&#39;charlie&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cdaniels@fauxfiddle.com
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plus we can print the whole dictionary:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;jim&#39;: &#39;j.magnuson@faux.org&#39;, &#39;charlie&#39;: &#39;cdaniels@fauxfiddle.com&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we can also write more complex scripts without much code</span>
+<span class="c1"># e.g. prime numbers below 50</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+     <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">x</span> <span class="o">%</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)])])</span>
+
+<span class="c1"># See if you can figure out how this does this -- see exercise at end...</span>
+<span class="c1"># Note that you could change the (1, 50) above to a different range; </span>
+<span class="c1"># try changing it to (50, 100) and then re-execute this cell. To do this, </span>
+<span class="c1"># just click on this cell and then directly edit the code and then press</span>
+<span class="c1"># the play ▶ icon again while this cell is active (click in it to make it </span>
+<span class="c1"># active)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+</pre></div>
+</div>
+</div>
+</div>
+<p>But Python is a general-purpose programming language and can be used for virtually anything with the support of code written by other people. Here are some examples.</p>
+</section>
+<section id="different-ways-to-use-python">
+<h2>Different ways to use Python<a class="headerlink" href="#different-ways-to-use-python" title="Link to this heading">#</a></h2>
+<p><strong>(1) Minimal</strong></p>
+<p>Launch the interpreter at the command line:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">python</span></code></p>
+</div></blockquote>
+<p>Then you can just enter commands and see what happens. This is fine for very rapid checking (e.g., checking whether a simple command works like you expect), but it’s not possible to save your code, and there are no graphics.</p>
+<hr class="docutils" />
+<p><strong>(2) Interactive</strong></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">ipython</span></code></p>
+</div></blockquote>
+<p>Like the minimal method, but you can interact with graphics, etc. But still not suitable for development or writing code.</p>
+<hr class="docutils" />
+<p><strong>(3) Jupyter notebook</strong></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p>
+</div></blockquote>
+<p>or</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code></p>
+</div></blockquote>
+<p>This has all the features of (2), but you can also save your work. You can test simple stuff, but then develop pretty substantial code. It can be a very nice way to interact with a package that you can load, etc. People use this for all kinds of things, and can even put together many notebooks to create a book or documentation of various sorts. For this class, this is our primary method.</p>
+<p>However, it’s not great for very long code or code that needs to be run often. For that, we want method (4).</p>
+<hr class="docutils" />
+<p><strong>(4) Use a normal text editor and run the program from the command line</strong></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">myprog.py</span></code></p>
+</div></blockquote>
+<p>This is the classic approach, and by far the most flexible. It can be challenging to prototype things, but you can of course use a combination of classic code and notebooks for your code development. We won’t probably use this at all in this course.</p>
+<hr class="docutils" />
+<p><strong>(5) Use an IDE (Integrated Development Environment) like Visual Code</strong></p>
+<p>We won’t cover this, but you may find it useful to explore.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="jupyter-and-markdown-resources">
+<h1>Jupyter and Markdown resources<a class="headerlink" href="#jupyter-and-markdown-resources" title="Link to this heading">#</a></h1>
+<p>Useful resources:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://jupyter.org">Jupyter</a></p></li>
+<li><p><a class="reference external" href="http://www.markdowntutorial.com">learn Markdown in 10 minutes</a></p></li>
+<li><p><a class="reference external" href="https://www.markdownguide.org/basic-syntax/">Markdown syntax</a></p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="optional-exercise-5-10-mins">
+<h1>Optional exercise (5-10 mins)<a class="headerlink" href="#optional-exercise-5-10-mins" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>create a new notebook that will be devoted to explaining the prime number code cell just above ‘Different ways of using Python’</p>
+<ul>
+<li><p>To do this, click the blue ‘+’ button to the left and select a Python3 kernel</p></li>
+</ul>
+</li>
+<li><p>give it a title (edit the name at the top)</p></li>
+<li><p>save it</p></li>
+<li><p>add a cell in Markdown with a heading (precede it with a # or ## or ### for different levels of headings) and a description of what the notebook is all about</p></li>
+<li><p>add a code cell and paste in the prime number code</p></li>
+<li><p>add a markdown cell below the code and explain what it does</p></li>
+<li><p>explore a few shortcuts:</p>
+<ul>
+<li><p>add a cell above the current one using <code class="docutils literal notranslate"><span class="pre">esc-a</span></code></p></li>
+<li><p>… below using <code class="docutils literal notranslate"><span class="pre">esc-b</span></code></p></li>
+<li><p>convert cell to Markdown using <code class="docutils literal notranslate"><span class="pre">esc-m</span></code></p></li>
+<li><p>convert cell to code using <code class="docutils literal notranslate"><span class="pre">esc-y</span></code></p></li>
+</ul>
+</li>
+<li><p>Explore the prime number code – try changing things and see what effect the changes have by re-executing the cell</p></li>
+</ul>
+<p>Final note: a Jupyter Notebook is a text file (with the extension .ipynb which stands for <em><strong>i</strong>nteractive <strong>py</strong>thon <strong>n</strong>ote <strong>b</strong>ook</em>) which can be opened and inspected in a normal text editor, or indeed from the command line, e.g.:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">python_jupyter_overview.ipynb</span></code></p>
+</div></blockquote>
+<p>BTW <code class="docutils literal notranslate"><span class="pre">cat</span></code> is the Unix command to con<strong>CAT</strong>enate files; with just a single file it prints it to the terminal window. See <a class="reference external" href="https://en.wikipedia.org/wiki/Cat_%28Unix%29">definition of Unix cat on Wikipedia</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># since we can use some Unix commands in code windows, let&#39;s look at the current notebook here</span>
+<span class="c1"># use ! to tell Jupyter to run it as an operating system (OS) command</span>
+
+<span class="c1"># N.B.: This will only work if the ipynb file is in the current directory; don&#39;t worry if you get an error</span>
+<span class="c1">#       Also, the *nix command `head` prints the first 10 lines only</span>
+<span class="o">!</span>head<span class="w"> </span>./00_python-jupyter-overview.ipynb
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+ &quot;cells&quot;: [
+  {
+   &quot;cell_type&quot;: &quot;markdown&quot;,
+   &quot;metadata&quot;: {
+    &quot;id&quot;: &quot;4rvUdrpydfUu&quot;
+   },
+   &quot;source&quot;: [
+    &quot;&lt;div class=\&quot;alert alert-block alert-info\&quot;&gt;\n&quot;,
+    &quot;    \n&quot;,
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<section id="that-s-it-for-now-we-will-discuss-additional-details-in-class">
+<h2>That’s it for now! We will discuss additional details in class.<a class="headerlink" href="#that-s-it-for-now-we-will-discuss-additional-details-in-class" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">models-of-the-mind-notebooks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="01_game-of-life.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Conway’s “Game of Life”</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Models of the Mind, 2024</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-jupyter-notebooks-and-python">INTRODUCTION TO JUPYTER NOTEBOOKS AND PYTHON</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-notebooks">How to run notebooks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-can-you-do-with-a-notebook">What can you do with a notebook?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-try-some-examples"><em>Let’s try some examples.</em></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-python">Exploring Python</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-tour-of-python">A quick tour of Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-ways-to-use-python">Different ways to use Python</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-and-markdown-resources">Jupyter and Markdown resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-exercise-5-10-mins">Optional exercise (5-10 mins)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#that-s-it-for-now-we-will-discuss-additional-details-in-class">That’s it for now! We will discuss additional details in class.</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
