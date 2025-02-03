@@ -1,0 +1,15 @@
+name: example-environment
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - time
+  - pandas
+  - pip
+  - pip:
+    - ipywidgets
+    - collections
+    - IPython.display
+    - matplotlib
+    - plotly
