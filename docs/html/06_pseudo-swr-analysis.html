@@ -1,0 +1,1507 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>More on mathematical models: Statistical models &#8212; Models of the Mind</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '06_pseudo-swr-analysis';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="07_swr-bayes-004.html" />
+    <link rel="prev" title="Introduction to Bayes’ theorem" href="05_bayes-theorem-rev.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Models of the Mind - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Models of the Mind - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    models-of-the-mind-notebooks
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_python-jupyter-overview.html">Models of the Mind, 2024</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01_game-of-life.html">Conway’s “Game of Life”</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="02a_math-probability-matching.html"><font color="red">LAB REPORT</font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02b_math-probability-matching.html">PROBABILITY MATCHING, PART 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_agent-probability-matching.html">PROBABILITY MATCHING, PART 3</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="04_probability-review.html">Preliminaries: Understanding Logical Symbols in Probability</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem-rev.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">More on mathematical models: Statistical models</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="07_swr-bayes-004.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="08_trace-swr.html">Implementations of the TRACE model</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="10_netsci-01.html">Network Science Overview</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="11_nnets-01-linear-functions-and-bias.html">Neural networks, Part 1: Linear logic functions as networks</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="12_nnets-02-training-linear-networks.html">Neural networks, Part 2 – training networks</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="13_nnets-03-learning-xor.html">Neural networks, Part 3 – training networks for non-linearly separable mappings</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="14_nnets-04-srn-statlearn.html">Neural networks, Part 4</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F06_pseudo-swr-analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/06_pseudo-swr-analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>More on mathematical models: Statistical models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">More on mathematical models: Statistical models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slight-tangent-pseudo-data">A slight tangent: Pseudo data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-data">Visualize the data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-report-part-1">Lab report part 1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-3d">Visualization: 3D</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-our-3d-plot">Improving our 3D plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-interactive-3d-plot">An interactive 3D plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-report-part-2">Lab report part 2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-statistical-analysis">More statistical analysis</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <code style="background:yellow;color:red">
+    <b>Note: there are 2 short lab report sections in this notebook. Make sure to find both! There is Lab report part 1 and Lab report part 2</b>
+</code>
+<p><strong>Important</strong>: you need to install seaborn and statsmodels to run this notebook: <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">statsmodels</span> <span class="pre">seaborn</span></code></p>
+<section id="more-on-mathematical-models-statistical-models">
+<h1>More on mathematical models: Statistical models<a class="headerlink" href="#more-on-mathematical-models-statistical-models" title="Link to this heading">#</a></h1>
+<p>I find it very hard to develop an understanding of a modeling framework without applying it in a specific domain – and eventually more than one domain.</p>
+<p>For the next few weeks, we are going to focus on the domain of <strong>spoken word recognition (SWR)</strong>. This happens to be my primary area of expertise in psychology / cognitive science / cognitive neuroscience – and computational modeling.</p>
+<p>As you’ll read in the recent review chapter that Anne Marie Crinnion and I wrote, this is a domain where scientists have amassed a lot of data and have discovered and described a lot of phenomena. However, we are still far from a deep understanding of how humans recognize spoken words. <em>(Note: please do read the Magnuson &amp; Crinnion paper, but do not stress about details – I will go over fundamentals in class.)</em></p>
+<p>Let’s consider the nature of the problem. I’ll show some demos in class to illustrate how speech is an amazingly complex signal. We have a sound source (mainly from vibrating our vocal folds) that drives acoustic energy through the malleable tube of our vocal tract. That acoustic energy is modulated by how we move or position our jaw, tongue, and lips. There are other articulators you may not even realize you have! The glottis operates like a valve within your larynx, and can be used to stop airflow (people from Connecticut tend to use a ‘glottal stop’ for the t-like sound in ‘mitten’). You can also raise and lower your <em>velum</em>; when it is lowered, energy flows through your nose allowing you to make <em>nasal</em> sounds like /m/, /n/, and /ŋ/ (the final sound in ‘ring’).</p>
+<p>Famously, there is a <em>lack of invariance</em> in the mapping from acoustics to our perception of consonants and vowels (the more general term is <em>phonemes</em>). Instead of an alphabet-like, discrete mapping, there is a complex, <em>many-to-many</em> mapping. That is, many different acoustic patterns can map to the same phoneme, while an identical acoustic pattern can map to different phonemes depending on context.</p>
+<p>While this many-to-many mapping was discovered by UConn scientists (e.g., psychologists Alvin Liberman and Donald Shankweiler, and linguists Ignatius Mattingly and Arthur Abramson) and their collaborators over a period of ~20 years (1950s-1970s), we still do not deeply understand how people achieve robust speech perception and word recognition <em>despite</em> the lack of invariance.</p>
+<p>But how can we get ideas about how the process of spoken word recognition works? We need a <em>lot</em> of systematic observations, and then we have to develop <em>information processing theories</em>, beginning at Marr’s (1982) <em>computational theory</em> level. For this, we need to try to identify and describe the inputs and outputs. For spoken word recognition, the inputs are the acoustic patterns over time that correspond to a word. The output needs to be some measure of processing that we will use to create an operational definition of recognition. So for example, we could present people with recordings of spoken words and simply ask them to repeat them as quickly as they can (a task known as <em>auditory naming</em> or <em>auditory shadowing</em>). If we use this task, we would likely eventually discover some interesting facts, such as these:</p>
+<ul class="simple">
+<li><p>People are faster to shadow/name when</p>
+<ul>
+<li><p>The word is highly familiar or has high <em>frequency of occurrence</em></p></li>
+<li><p>The word has very high-probability phoneme sequences</p></li>
+<li><p>The word follows a semantically related word (a <em>priming</em> effect; for example, people are faster to name <em>doctor</em> when it is preceded by <em>nurse</em> vs. an unrelated word like <em>sandwich</em>)</p></li>
+</ul>
+</li>
+</ul>
+<p>Even these findings indicate some important principles we would want to capture in a theory. We will want the theory to include a basis for high probabilities (of words of subparts of words) to promote faster processing, and we would also need to consider how/why semantic relatedness might matter.</p>
+<p>Another commonly used task is called <em>lexical decision</em>. In a lexical decision task, we also create many <em>nonwords</em>, or more aptly, <em>pseudowords</em>, because they have to be pronouceable strings in English. So we might create nonword patterns like <em>fahv</em>, <em>layf</em>, or <em>pilch</em>. We would usually want to avoid patterns that do not occur in English. For example, no words in English start with <em>bw-</em> (aside from loan words, like <em>bwana</em>). This sequence <em>does</em> occur in other places (e.g., <em>su<strong>bw</strong>ay</em>), and of course, other languages use this sequence at word onset (e.g., French <em>bois</em> or <em>boire</em> or Spanish <em>bueno</em>). Now we will present listeners with a series of stimuli that may be words or pseudowords. Their task is to answer the question <em>is this a word?</em> for each item. So they should press a key for YES if the stimulus is <em>frame</em> but NO if the stimulus is <em>pilch</em>.</p>
+<p>With this kind of task, scientists have confirmed the patterns I mentioned above (sensitivity to probability and semantic relatedness, providing <em>converging evidence</em> from two tasks), and also discovered many more such as:</p>
+<ul class="simple">
+<li><p>Words are recognized more <em>slowly</em> if there are many words that are highly similar to them in sound (phonological neighbors)</p>
+<ul>
+<li><p>Phonological neighbors are typically defined using the DAS rule: 2 words are neighbors if they differ by no more than 1 _D_eletion, _A_ddition, or _S_ubstitution</p></li>
+<li><p>So ‘cat’ has the phonemes /kæt/ and has a deletion neighbor (at), addition neighbors (scat, cast), and many substitution neighobrs (bat, cot, can, etc.)</p></li>
+</ul>
+</li>
+<li><p>Having more onset competitors (‘cohorts’)</p>
+<ul>
+<li><p>We can predict the position in a word where people will become highly confident of what the word is: its <em>uniqueness point</em> is the position where it is the only possible word (e.g., when you get to the <em>f</em> sound in <em>xylophone</em>, it can only be one word).</p></li>
+</ul>
+</li>
+</ul>
+<p>So the primary kind of observation we typically have in this domain is reaction time for tasks like naming or lexical decision. From that data, we try to infer what is happening during the process of word recognition.</p>
+<p>To get a sense of how scientists do this – and to see how some classic models of human spoken word recognition developed – we will work with some data. We will delve very shallowly into the kinds of statistical analyses that are used in this domain. But the key goal is to get our feet wet with some realistic data because as we progress through this section of the course, we will work towards linking human performance data with computational models.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Note</span> <span class="pre">that</span> <span class="pre">while</span> <span class="pre">we</span> <span class="pre">will</span> <span class="pre">look</span> <span class="pre">at</span> <span class="pre">real</span> <span class="pre">statistical</span> <span class="pre">models,</span> <span class="pre">you</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">expected</span> <span class="pre">to</span> <span class="pre">learn</span> <span class="pre">all</span> <span class="pre">the</span> <span class="pre">details.</span> <span class="pre">I</span> <span class="pre">will</span> <span class="pre">explain</span> <span class="pre">them</span> <span class="pre">conceptually.</span> <span class="pre">The</span> <span class="pre">goal</span> <span class="pre">is</span> <span class="pre">to</span> <span class="pre">give</span> <span class="pre">you</span> <span class="pre">a</span> <span class="pre">sense</span> <span class="pre">of</span> <span class="pre">how</span> <span class="pre">we</span> <span class="pre">work</span> <span class="pre">in</span> <span class="pre">this</span> <span class="pre">domain.</span></code></p>
+<hr class="docutils" />
+</section>
+<section id="a-slight-tangent-pseudo-data">
+<h1>A slight tangent: Pseudo data<a class="headerlink" href="#a-slight-tangent-pseudo-data" title="Link to this heading">#</a></h1>
+<p>Now eventually we will need to work with <em>real</em> data – actual mean reaction times (RTs) for
+words and real frequency, cohort, and neighborhood values. But the
+utility of this exercise is to see some ways to play around with data
+and get a sense of how different correlational relationships might
+play out in a statistical analysis. This may give us a sense of how
+hard it is to predict multidimensional relations.</p>
+<p>We will create a correlation matrix with desired correlations between
+variables and then run a simple multiple regression.</p>
+<p><em>Pseudo data</em> can be thought of as a model system, but not a computational model. The idea is that we can generate <em>distributions</em> of multiple values that have particular relations between them <em>that we specify</em>. So if we have ideas about kinds of relationships that may exist, we can build them into our pseudo data and see how we can suss them out with statistics. We could also compare pseudo data to a working computational model, but any failures of the model to match the pseudo data may not be very meaningful. (Why?)</p>
+<p>Later in this notebook, you will read about a simple approach to
+multiple regression. We can discuss it in class. <code class="docutils literal notranslate"><span class="pre">Note</span> <span class="pre">that</span>&#160; <span class="pre">every</span> <span class="pre">time</span> <span class="pre">you</span> <span class="pre">rerun</span> <span class="pre">this</span> <span class="pre">code</span> <span class="pre">block,</span> <span class="pre">you</span> <span class="pre">will</span> <span class="pre">get</span> <span class="pre">new</span> <span class="pre">random</span> <span class="pre">data</span>&#160; <span class="pre">(unless</span> <span class="pre">you</span> <span class="pre">set</span> <span class="pre">the</span> <span class="pre">random</span> <span class="pre">seed</span> <span class="pre">to</span> <span class="pre">a</span> <span class="pre">fixed</span> <span class="pre">value).</span></code> So you could
+re-run this block multiple times to get a sense of the range of outcomes
+you can get with this approach.</p>
+<p>This next code block generates pseudo data, where words vary in frequency of occurrence, number of neighbors, and number of cohorts. We will build in some correlations between those dimensions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="n">base_rt</span> <span class="o">=</span> <span class="mi">750</span> <span class="c1"># a very typical RT for spoken words; </span>
+              <span class="c1"># we will create distributions around this value</span>
+<span class="n">bump_rt</span> <span class="o">=</span> <span class="mi">250</span> <span class="c1"># a value we can use to boost that base_rt sometimes</span>
+<span class="n">min_rt</span> <span class="o">=</span> <span class="mi">400</span>  <span class="c1"># minimum acceptable RT; see &#39;clipping&#39; below</span>
+<span class="n">max_rt</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># max acceptable RT</span>
+<span class="n">base_predictor</span> <span class="o">=</span> <span class="mi">50</span> <span class="c1"># an arbitrary value we will use to &#39;seed&#39; frequency, cohorts, and neighbors</span>
+<span class="n">bump_predictor</span> <span class="o">=</span> <span class="mi">20</span>
+
+
+<span class="c1"># uncomment to set the randomseed so you always get the same results</span>
+<span class="c1">#np.random.seed(37)</span>
+
+<span class="c1"># Function to generate correlated data using Cholesky decomposition</span>
+<span class="k">def</span> <span class="nf">generate_correlated_data</span><span class="p">(</span><span class="n">target_corr_matrix</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate correlated data using Cholesky decomposition.&quot;&quot;&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">target_corr_matrix</span><span class="p">)</span>
+    
+    <span class="c1"># Generate uncorrelated data</span>
+    <span class="n">uncorrelated_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">target_corr_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    
+    <span class="c1"># Use Cholesky decomposition to introduce the desired correlations</span>
+    <span class="n">correlated_data</span> <span class="o">=</span> <span class="n">uncorrelated_data</span> <span class="o">@</span> <span class="n">L</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">correlated_data</span>
+
+<span class="c1"># We need to build a list of simple words that will be our &#39;pretend&#39; stimulus items.</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;strength&#39;</span><span class="p">,</span> <span class="s1">&#39;shrift&#39;</span><span class="p">,</span> <span class="s1">&#39;friend&#39;</span><span class="p">,</span> <span class="s1">&#39;bread&#39;</span><span class="p">,</span> <span class="s1">&#39;dread&#39;</span><span class="p">,</span> <span class="s1">&#39;fled&#39;</span><span class="p">,</span> <span class="s1">&#39;shred&#39;</span><span class="p">,</span> <span class="s1">&#39;tread&#39;</span><span class="p">,</span> <span class="s1">&#39;bland&#39;</span><span class="p">,</span> <span class="s1">&#39;brand&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;stand&#39;</span><span class="p">,</span> <span class="s1">&#39;grand&#39;</span><span class="p">,</span> <span class="s1">&#39;land&#39;</span><span class="p">,</span> <span class="s1">&#39;hand&#39;</span><span class="p">,</span> <span class="s1">&#39;sand&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;gland&#39;</span><span class="p">,</span> <span class="s1">&#39;chant&#39;</span><span class="p">,</span> <span class="s1">&#39;plant&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rant&#39;</span><span class="p">,</span> <span class="s1">&#39;slant&#39;</span><span class="p">,</span> <span class="s1">&#39;grant&#39;</span><span class="p">,</span> <span class="s1">&#39;trance&#39;</span><span class="p">,</span> <span class="s1">&#39;dance&#39;</span><span class="p">,</span> <span class="s1">&#39;prance&#39;</span><span class="p">,</span> <span class="s1">&#39;lance&#39;</span><span class="p">,</span> <span class="s1">&#39;chance&#39;</span><span class="p">,</span> <span class="s1">&#39;mance&#39;</span><span class="p">,</span> <span class="s1">&#39;glance&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;clad&#39;</span><span class="p">,</span> <span class="s1">&#39;glad&#39;</span><span class="p">,</span> <span class="s1">&#39;plaid&#39;</span><span class="p">,</span> <span class="s1">&#39;scad&#39;</span><span class="p">,</span> <span class="s1">&#39;sked&#39;</span><span class="p">,</span> <span class="s1">&#39;shad&#39;</span><span class="p">,</span> <span class="s1">&#39;sped&#39;</span><span class="p">,</span> <span class="s1">&#39;thread&#39;</span><span class="p">,</span> <span class="s1">&#39;pled&#39;</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="s1">&#39;lead&#39;</span><span class="p">,</span> <span class="s1">&#39;bead&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;mead&#39;</span><span class="p">,</span> <span class="s1">&#39;deed&#39;</span><span class="p">,</span> <span class="s1">&#39;reed&#39;</span><span class="p">,</span> <span class="s1">&#39;weed&#39;</span><span class="p">,</span> <span class="s1">&#39;feed&#39;</span><span class="p">,</span> <span class="s1">&#39;heed&#39;</span><span class="p">,</span> <span class="s1">&#39;need&#39;</span><span class="p">,</span> <span class="s1">&#39;seed&#39;</span><span class="p">,</span> <span class="s1">&#39;sleek&#39;</span><span class="p">,</span> <span class="s1">&#39;bleak&#39;</span><span class="p">,</span> <span class="s1">&#39;creak&#39;</span><span class="p">,</span> <span class="s1">&#39;leak&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;peak&#39;</span><span class="p">,</span> <span class="s1">&#39;beak&#39;</span><span class="p">,</span> <span class="s1">&#39;reek&#39;</span><span class="p">,</span> <span class="s1">&#39;seek&#39;</span><span class="p">,</span> <span class="s1">&#39;teak&#39;</span><span class="p">,</span> <span class="s1">&#39;geek&#39;</span><span class="p">,</span> <span class="s1">&#39;sheik&#39;</span><span class="p">,</span> <span class="s1">&#39;cheek&#39;</span><span class="p">,</span> <span class="s1">&#39;sneak&#39;</span><span class="p">,</span> <span class="s1">&#39;speak&#39;</span><span class="p">,</span> <span class="s1">&#39;freak&#39;</span><span class="p">,</span> <span class="s1">&#39;streak&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;bleed&#39;</span><span class="p">,</span> <span class="s1">&#39;creed&#39;</span><span class="p">,</span> <span class="s1">&#39;breed&#39;</span><span class="p">,</span> <span class="s1">&#39;tweed&#39;</span><span class="p">,</span> <span class="s1">&#39;freed&#39;</span><span class="p">,</span> <span class="s1">&#39;speed&#39;</span><span class="p">,</span> <span class="s1">&#39;steed&#39;</span><span class="p">,</span> <span class="s1">&#39;meed&#39;</span><span class="p">,</span> <span class="s1">&#39;beep&#39;</span><span class="p">,</span> <span class="s1">&#39;peep&#39;</span><span class="p">,</span> <span class="s1">&#39;deep&#39;</span><span class="p">,</span> <span class="s1">&#39;seep&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;weep&#39;</span><span class="p">,</span> <span class="s1">&#39;keep&#39;</span><span class="p">,</span> <span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;steep&#39;</span><span class="p">,</span> <span class="s1">&#39;creep&#39;</span><span class="p">,</span> <span class="s1">&#39;sheep&#39;</span><span class="p">,</span> <span class="s1">&#39;sweep&#39;</span><span class="p">,</span> <span class="s1">&#39;bleep&#39;</span><span class="p">,</span> <span class="s1">&#39;blew&#39;</span><span class="p">,</span> <span class="s1">&#39;drew&#39;</span><span class="p">,</span> <span class="s1">&#39;grew&#39;</span><span class="p">,</span> <span class="s1">&#39;screw&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;stew&#39;</span><span class="p">,</span> <span class="s1">&#39;shrew&#39;</span><span class="p">,</span> <span class="s1">&#39;threw&#39;</span><span class="p">,</span> <span class="s1">&#39;skew&#39;</span><span class="p">,</span> <span class="s1">&#39;chew&#39;</span><span class="p">,</span> <span class="s1">&#39;flew&#39;</span><span class="p">,</span> <span class="s1">&#39;slew&#39;</span><span class="p">,</span> <span class="s1">&#39;hew&#39;</span><span class="p">,</span> <span class="s1">&#39;brisk&#39;</span><span class="p">,</span> <span class="s1">&#39;disk&#39;</span><span class="p">,</span> <span class="s1">&#39;frisk&#39;</span><span class="p">,</span> <span class="s1">&#39;whisk&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;risk&#39;</span><span class="p">,</span> <span class="s1">&#39;ask&#39;</span><span class="p">,</span> <span class="s1">&#39;bask&#39;</span><span class="p">,</span> <span class="s1">&#39;cask&#39;</span><span class="p">,</span> <span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="s1">&#39;task&#39;</span><span class="p">,</span> <span class="s1">&#39;flask&#39;</span><span class="p">,</span> <span class="s1">&#39;brisk&#39;</span><span class="p">,</span> <span class="s1">&#39;crisp&#39;</span><span class="p">,</span> <span class="s1">&#39;whisk&#39;</span><span class="p">,</span> <span class="s1">&#39;twist&#39;</span><span class="p">,</span> <span class="s1">&#39;wrist&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="s1">&#39;fist&#39;</span><span class="p">,</span> <span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;gist&#39;</span><span class="p">,</span> <span class="s1">&#39;wisp&#39;</span><span class="p">,</span> <span class="s1">&#39;hiss&#39;</span><span class="p">,</span> <span class="s1">&#39;kiss&#39;</span><span class="p">,</span> <span class="s1">&#39;miss&#39;</span><span class="p">,</span> <span class="s1">&#39;diss&#39;</span><span class="p">,</span> <span class="s1">&#39;bliss&#39;</span><span class="p">,</span> <span class="s1">&#39;this&#39;</span><span class="p">,</span> <span class="s1">&#39;whiz&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;biz&#39;</span><span class="p">,</span> <span class="s1">&#39;fizz&#39;</span><span class="p">,</span> <span class="s1">&#39;dizz&#39;</span><span class="p">,</span> <span class="s1">&#39;fray&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;play&#39;</span><span class="p">,</span> <span class="s1">&#39;slay&#39;</span><span class="p">,</span> <span class="s1">&#39;pray&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;tray&#39;</span><span class="p">,</span> <span class="s1">&#39;stray&#39;</span><span class="p">,</span> <span class="s1">&#39;spray&#39;</span><span class="p">,</span> <span class="s1">&#39;stay&#39;</span><span class="p">,</span> <span class="s1">&#39;sway&#39;</span><span class="p">,</span> <span class="s1">&#39;weigh&#39;</span><span class="p">,</span> <span class="s1">&#39;deign&#39;</span><span class="p">,</span> <span class="s1">&#39;feign&#39;</span><span class="p">,</span> <span class="s1">&#39;reign&#39;</span><span class="p">,</span> <span class="s1">&#39;vein&#39;</span><span class="p">,</span> <span class="s1">&#39;vane&#39;</span><span class="p">,</span> <span class="s1">&#39;wane&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blame&#39;</span><span class="p">,</span> <span class="s1">&#39;flame&#39;</span><span class="p">,</span> <span class="s1">&#39;claim&#39;</span><span class="p">,</span> <span class="s1">&#39;aim&#39;</span><span class="p">,</span> <span class="s1">&#39;game&#39;</span><span class="p">,</span> <span class="s1">&#39;tame&#39;</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;shame&#39;</span><span class="p">,</span> <span class="s1">&#39;frame&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;came&#39;</span><span class="p">,</span> <span class="s1">&#39;dame&#39;</span><span class="p">,</span> <span class="s1">&#39;lame&#39;</span><span class="p">,</span> <span class="s1">&#39;mime&#39;</span><span class="p">,</span> <span class="s1">&#39;chime&#39;</span><span class="p">,</span> <span class="s1">&#39;lime&#39;</span><span class="p">,</span> <span class="s1">&#39;prime&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;climb&#39;</span><span class="p">,</span> <span class="s1">&#39;slime&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;rhyme&#39;</span><span class="p">,</span> <span class="s1">&#39;thyme&#39;</span><span class="p">,</span> <span class="s1">&#39;dim&#39;</span><span class="p">,</span> <span class="s1">&#39;brim&#39;</span><span class="p">,</span> <span class="s1">&#39;rim&#39;</span><span class="p">,</span> <span class="s1">&#39;trim&#39;</span><span class="p">,</span> <span class="s1">&#39;grim&#39;</span><span class="p">,</span> <span class="s1">&#39;swim&#39;</span><span class="p">,</span> <span class="s1">&#39;hymn&#39;</span><span class="p">,</span> <span class="s1">&#39;limb&#39;</span><span class="p">,</span> <span class="s1">&#39;sim&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;vim&#39;</span><span class="p">,</span> <span class="s1">&#39;whim&#39;</span><span class="p">,</span> <span class="s1">&#39;gym&#39;</span><span class="p">,</span> <span class="s1">&#39;thin&#39;</span><span class="p">,</span> <span class="s1">&#39;shin&#39;</span><span class="p">,</span> <span class="s1">&#39;kin&#39;</span><span class="p">,</span> <span class="s1">&#39;chin&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">,</span> <span class="s1">&#39;tin&#39;</span><span class="p">,</span> <span class="s1">&#39;fin&#39;</span><span class="p">,</span> <span class="s1">&#39;win&#39;</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;gin&#39;</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">,</span> <span class="s1">&#39;spin&#39;</span><span class="p">,</span> <span class="s1">&#39;grin&#39;</span><span class="p">,</span> <span class="s1">&#39;skin&#39;</span><span class="p">,</span> <span class="s1">&#39;twin&#39;</span><span class="p">,</span> <span class="s1">&#39;rinse&#39;</span><span class="p">,</span> <span class="s1">&#39;mince&#39;</span><span class="p">,</span> <span class="s1">&#39;since&#39;</span><span class="p">,</span> <span class="s1">&#39;wince&#39;</span>
+<span class="p">]</span>
+<span class="n">wl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WORDS: </span><span class="si">{</span><span class="n">wl</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># note from jim to jim: phonemic transcription code is in pseudo-word-analysis-02.ipynb</span>
+
+<span class="c1"># Desired correlations matrix (initial guess)</span>
+<span class="n">target_correlations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="c1"># Number of samples to generate</span>
+<span class="n">num_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+<span class="n">correlated_data</span> <span class="o">=</span> <span class="n">generate_correlated_data</span><span class="p">(</span><span class="n">target_correlations</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">)</span>
+
+<span class="c1"># Extract the columns and scale them to the desired range</span>
+<span class="n">rt_values</span> <span class="o">=</span> <span class="n">base_rt</span> <span class="o">+</span> <span class="n">bump_rt</span> <span class="o">*</span> <span class="n">correlated_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">frequency_values_corr</span> <span class="o">=</span> <span class="n">base_predictor</span> <span class="o">+</span> <span class="n">bump_predictor</span> <span class="o">*</span> <span class="n">correlated_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">cohorts_values_corr</span> <span class="o">=</span> <span class="n">base_predictor</span> <span class="o">+</span> <span class="n">bump_predictor</span> <span class="o">*</span> <span class="n">correlated_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">neighbors_values_corr</span> <span class="o">=</span> <span class="n">base_predictor</span> <span class="o">+</span> <span class="n">bump_predictor</span> <span class="o">*</span> <span class="n">correlated_data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Clip the data to the desired range</span>
+<span class="n">rt_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rt_values</span><span class="p">,</span> <span class="n">min_rt</span><span class="p">,</span> <span class="n">max_rt</span><span class="p">)</span>
+<span class="n">frequency_values_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">frequency_values_corr</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">cohorts_values_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">cohorts_values_corr</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">neighbors_values_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">neighbors_values_corr</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Create the DataFrame with the correlated data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Orthography&#39;</span><span class="p">:</span> <span class="n">words</span><span class="p">,</span>
+    <span class="s1">&#39;Frequency&#39;</span><span class="p">:</span> <span class="n">frequency_values_corr</span><span class="p">,</span>
+    <span class="s1">&#39;Cohorts&#39;</span><span class="p">:</span> <span class="n">cohorts_values_corr</span><span class="p">,</span>
+    <span class="s1">&#39;Neighbors&#39;</span><span class="p">:</span> <span class="n">neighbors_values_corr</span><span class="p">,</span>
+    <span class="s1">&#39;RT&#39;</span><span class="p">:</span> <span class="n">rt_values</span>
+<span class="p">})</span>
+
+<span class="c1"># STATISTICAL ANALYSIS</span>
+
+<span class="c1"># Multiple Regression</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Adds a constant term to the predictor</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WORDS: 200
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                     RT   R-squared:                       0.137
+Model:                            OLS   Adj. R-squared:                  0.124
+Method:                 Least Squares   F-statistic:                     10.38
+Date:                Wed, 02 Oct 2024   Prob (F-statistic):           2.26e-06
+Time:                        09:06:41   Log-Likelihood:                -1355.2
+No. Observations:                 200   AIC:                             2718.
+Df Residuals:                     196   BIC:                             2732.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        795.7345     59.120     13.460      0.000     679.141     912.328
+Frequency     -3.4514      0.765     -4.513      0.000      -4.959      -1.943
+Cohorts        1.8893      0.934      2.023      0.044       0.048       3.731
+Neighbors      0.8766      0.903      0.971      0.333      -0.904       2.658
+==============================================================================
+Omnibus:                        7.398   Durbin-Watson:                   1.995
+Prob(Omnibus):                  0.025   Jarque-Bera (JB):                7.611
+Skew:                           0.477   Prob(JB):                       0.0223
+Kurtosis:                       2.937   Cond. No.                         352.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="visualize-the-data">
+<h1>Visualize the data<a class="headerlink" href="#visualize-the-data" title="Link to this heading">#</a></h1>
+<p>One of the most important things you can do with any dataset is visualize it.
+This can make relations more apparent, or more importantly, may reveal
+problematic data points (e.g., outliers), or unexpected patterns like
+bimodal distributions [we can discuss in class why this could be problematic]).</p>
+<p>Let’s start with scatterplot matrices. Here we are going to have a 4x4 matrix of plots. Consider the first row. The first panel is a histogram of Frequency values. The next 3 plots are scatterplots of Frequency on the Y (vertical) axis and Cohorts, Neighbors, and RT on the X axes as we move to the right. Now look at the first column. We start with the same histogram, but now the Y axes progress from Cohorts to Neighbors to RT as we move down, and the X axis is always Frequency. So the 3rd panel from the top in the leftmost column has the same data as the 3rd panel from the left in the top row, but with the axes reversed. We could just leave either the top ‘triangle’ or bottom triangle of plots blank, but this function instead shows us one ‘clean’ scatter plot with R values printed in the upper triangle, and scatter plots with lines of best fit superimposed in the lower triangle. We will discuss this more in class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Scatterplot matrix with corrected correlation function</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">corrfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Corrected this line</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;R = </span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">.1</span><span class="p">,</span> <span class="mf">.9</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+
+<span class="n">pair_grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;RT&#39;</span><span class="p">],</span> <span class="n">height</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">pair_grid</span> <span class="o">=</span> <span class="n">pair_grid</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pair_grid</span> <span class="o">=</span> <span class="n">pair_grid</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><span class="n">corrfunc</span><span class="p">)</span>
+<span class="n">pair_grid</span> <span class="o">=</span> <span class="n">pair_grid</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">pair_grid</span> <span class="o">=</span> <span class="n">pair_grid</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/08ea21f8fcf7506564bef66850529b7828209a00e168bf66c7f4240f5931b4bb.png" src="_images/08ea21f8fcf7506564bef66850529b7828209a00e168bf66c7f4240f5931b4bb.png" />
+</div>
+</div>
+<hr class="docutils" />
+<section id="lab-report-part-1">
+<h2>Lab report part 1<a class="headerlink" href="#lab-report-part-1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Go back to the code block that generates the data and prints a regression table. Run the code block 3 times. Each time, record the R-squared value you see in the table (top row, far right). Each time also re-run the scatterplot matrix block above. Report your 3 R-squared values, and any observations you can make about the whether different R-squared values seem to relate to the plots (they may not!).</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="visualization-3d">
+<h2>Visualization: 3D<a class="headerlink" href="#visualization-3d" title="Link to this heading">#</a></h2>
+<p>The next few sections just show you other ways you can easily visualize data in Python. Please just review them and start getting a sense of what we can do, and why it might be useful to visualize data.</p>
+<p>With so many variables, it might be helpful to try to look at multiple relations at once by using 3d scatterplots. Here’s an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="c1"># Create a new figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Scatter plot</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set labels and title</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;RT&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;3D Scatter plot of RT vs. Frequency and Neighbors&#39;</span><span class="p">)</span>
+
+<span class="c1">#plt.show()</span>
+
+<span class="c1"># Functions to compute the regression lines and get two end points for plotting</span>
+
+<span class="k">def</span> <span class="nf">compute_line_endpoints</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Linear regression to get slope and intercept</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Using min and max values of x to get two end points for the line</span>
+    <span class="n">x_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="n">y_vals</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">x_vals</span> <span class="o">+</span> <span class="n">intercept</span>
+    
+    <span class="k">return</span> <span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span>
+
+<span class="c1"># Calculate endpoints for the best fit lines</span>
+<span class="n">x_rt_freq</span><span class="p">,</span> <span class="n">y_rt_freq</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">x_rt_neigh</span><span class="p">,</span> <span class="n">y_rt_neigh</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">x_neigh_freq</span><span class="p">,</span> <span class="n">y_neigh_freq</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="c1"># Plotting</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Scatter plot</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Plot best fit lines</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">),</span> <span class="n">y_rt_freq</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Frequency&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_neigh</span><span class="p">),</span> <span class="n">x_rt_neigh</span><span class="p">,</span> <span class="n">y_rt_neigh</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Neighbors&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">,</span> <span class="n">y_neigh_freq</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: Neighbors on Frequency&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set labels, title and legend</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;RT&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4fccb32045817419a35edaeac030758c369d38763d0a51b0658bc46d128011af.png" src="_images/4fccb32045817419a35edaeac030758c369d38763d0a51b0658bc46d128011af.png" />
+<img alt="_images/af9a9a0c0eedcebbe85562194c98cf221694db4e2a726b0d3747ba726556350d.png" src="_images/af9a9a0c0eedcebbe85562194c98cf221694db4e2a726b0d3747ba726556350d.png" />
+</div>
+</div>
+</section>
+<section id="improving-our-3d-plot">
+<h2>Improving our 3D plot<a class="headerlink" href="#improving-our-3d-plot" title="Link to this heading">#</a></h2>
+<p>Cool! Can we also add lines of best fit? Let’s put them on the ‘walls’ and ‘floor’.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Functions to compute the regression lines and get two end points for plotting</span>
+
+<span class="k">def</span> <span class="nf">compute_line_endpoints</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Linear regression to get slope and intercept</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Using min and max values of x to get two end points for the line</span>
+    <span class="n">x_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="n">y_vals</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">x_vals</span> <span class="o">+</span> <span class="n">intercept</span>
+    
+    <span class="k">return</span> <span class="n">x_vals</span><span class="p">,</span> <span class="n">y_vals</span>
+
+<span class="c1"># Calculate endpoints for the best fit lines</span>
+<span class="n">x_rt_freq</span><span class="p">,</span> <span class="n">y_rt_freq</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">x_rt_neigh</span><span class="p">,</span> <span class="n">y_rt_neigh</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">x_neigh_freq</span><span class="p">,</span> <span class="n">y_neigh_freq</span> <span class="o">=</span> <span class="n">compute_line_endpoints</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="c1"># Plotting</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Scatter plot</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Plot best fit lines</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">),</span> <span class="n">y_rt_freq</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Frequency&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_neigh</span><span class="p">),</span> <span class="n">x_rt_neigh</span><span class="p">,</span> <span class="n">y_rt_neigh</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Neighbors&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">,</span> <span class="n">y_neigh_freq</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Best Fit: Neighbors on Frequency&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set labels, title and legend</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;RT&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/af9a9a0c0eedcebbe85562194c98cf221694db4e2a726b0d3747ba726556350d.png" src="_images/af9a9a0c0eedcebbe85562194c98cf221694db4e2a726b0d3747ba726556350d.png" />
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="an-interactive-3d-plot">
+<h2>An interactive 3D plot<a class="headerlink" href="#an-interactive-3d-plot" title="Link to this heading">#</a></h2>
+<p>This is better, but it is a bit hard to resolve some of the points and understand where they
+are in the 3D space. It would be great if we could rotate the plot. The <code class="docutils literal notranslate"><span class="pre">plotly</span></code> package
+provides tools for such interaction. Here’s an example.</p>
+<p>Note that you can click and drag to rotate the 3dmatrix. You can use a scroll wheel to zoom in and out.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># Create a scatter plot</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">],</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">],</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span>
+    <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Data Points&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Create line plots for best fit lines</span>
+<span class="n">line_rt_freq</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_rt_freq</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">),</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">y_rt_freq</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Frequency&quot;</span>
+<span class="p">)</span>
+
+<span class="n">line_rt_neigh</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_neigh</span><span class="p">),</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">x_rt_neigh</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">y_rt_neigh</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Neighbors&quot;</span>
+<span class="p">)</span>
+
+<span class="n">line_neigh_freq</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_neigh_freq</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_neigh_freq</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">),</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: Neighbors on Frequency&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Define the layout</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+    <span class="n">scene</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+        <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Neighbors&quot;</span><span class="p">,</span>
+        <span class="n">zaxis_title</span><span class="o">=</span><span class="s2">&quot;RT&quot;</span>
+    <span class="p">),</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Combine traces and plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">scatter</span><span class="p">,</span> <span class="n">line_rt_freq</span><span class="p">,</span> <span class="n">line_rt_neigh</span><span class="p">,</span> <span class="n">line_neigh_freq</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>                            <div id="b384325a-4ff1-4862-9921-2a59706a6368" class="plotly-graph-div" style="height:900px; width:900px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("b384325a-4ff1-4862-9921-2a59706a6368")) {                    Plotly.newPlot(                        "b384325a-4ff1-4862-9921-2a59706a6368",                        [{"marker":{"color":"blue","opacity":0.5,"size":4},"mode":"markers","name":"Data Points","x":[90,42,69,49,33,54,29,51,42,69,43,57,18,14,42,46,51,64,43,49,54,79,46,32,38,52,53,48,2,40,62,55,62,36,52,54,47,53,38,39,48,81,46,47,29,79,43,24,70,44,75,54,46,63,58,42,74,39,71,40,39,47,83,82,34,18,7,77,87,56,40,44,11,26,76,58,59,49,47,17,43,88,51,49,42,54,53,39,35,62,62,58,43,48,50,45,40,37,45,35,41,46,27,57,46,43,56,10,61,24,7,18,44,53,35,71,68,49,24,53,54,71,33,21,24,10,58,63,69,75,68,68,64,62,49,70,37,65,22,55,73,66,75,36,61,71,44,35,77,35,22,55,73,39,41,50,31,46,32,66,70,41,65,58,56,58,29,40,25,36,63,77,54,89,49,45,47,39,16,48,57,58,66,66,56,59,31,31,68,30,72,31,11,52,49,68,71,64,43,32],"y":[68,55,55,73,45,33,53,48,57,61,65,33,28,69,47,47,65,78,73,41,81,66,72,53,31,39,57,49,67,19,5,58,54,54,65,69,37,81,31,27,51,61,44,75,35,17,43,72,55,80,14,65,68,67,69,60,47,65,14,42,48,29,41,69,24,60,50,22,72,36,32,97,37,80,45,65,30,72,63,38,53,44,30,56,37,65,82,46,62,31,32,40,2,91,84,55,45,71,82,31,51,78,71,55,54,44,32,46,41,38,20,28,55,44,33,78,47,19,54,27,2,20,81,43,4,52,30,55,50,40,72,38,56,54,66,30,72,52,40,62,17,62,43,38,38,20,72,43,24,46,67,22,56,44,43,50,40,43,69,49,26,51,43,55,86,50,48,52,47,76,35,52,47,45,69,45,41,68,64,81,96,95,66,48,71,56,51,88,79,61,29,39,55,20,66,63,53,81,75,57],"z":[637.5877155194179,703.504975865275,728.022662162536,880.3433457563488,733.0749121353064,400.0,823.1947497083969,487.2824367435357,1152.743660341464,531.9430211950752,436.28243046887104,808.8452651609164,609.8968560917305,636.3601870973312,794.9850971403772,800.0343624917473,1128.3666566929164,486.97110143721113,400.0,400.0,400.0,774.5638538048867,1147.8339015437036,657.7737940462484,788.0491198572805,573.4455407408143,400.0,841.793784996072,1058.7322976404357,834.6284115194422,967.1436539831634,685.4427863899946,400.0,712.3342361885402,762.3840997372911,1117.0237651272903,790.5742289995474,885.7214461861905,661.8076261233134,870.6555815744955,1040.3167207558854,400.0,1054.088719283058,781.9622994965565,660.4740377034345,400.0,761.12381720527,628.7330846986581,555.2223090856555,998.394772709781,424.44759735577213,400.0,670.0579650932387,738.8721850091972,906.718862114997,704.5241737522784,1230.6722970146802,920.1537127838262,808.9092647589758,400.0,983.5874923108967,410.33606909735545,663.9674053769298,652.9636334212913,710.9146227492461,1180.5106135269666,914.3236546173957,407.1626926447623,505.32495003882957,453.72830983511636,631.4514405430291,1221.4753205576815,1137.77786572564,865.6443015342261,531.7187487340815,714.9997272859085,783.1915148734369,598.854639615733,735.5752694721955,620.6827072382162,816.7085355987108,557.9299933370517,854.0547723740477,617.2840287288725,769.1361150698871,828.8516117207339,1030.4016623843772,1109.080661913506,815.6982546181769,929.5137309590499,505.453342437591,575.4331144260942,803.2673014033653,1070.7360755869436,1405.4763281213802,668.8971484585007,521.6883082612784,850.2294571816922,675.3118587329554,895.7369484308475,815.8354597107309,1168.9600214738728,470.8798457701749,508.09380291092435,585.7777175324006,975.6368127804519,889.3645695518617,722.3435074456497,452.91902680906924,900.7929317539935,1021.4101670062649,1072.5298406618676,1064.9157618370784,995.5631106510739,544.3745995818724,845.7278195612821,1095.1660000556342,779.7954973064454,1216.743255235364,400.0,690.4551675783849,817.3701312376687,1018.1582485948403,787.8225741971687,775.7028752409791,707.7835998492075,775.5566841401998,401.20337091271256,511.4941564337773,788.4307885440443,539.9906136652476,444.2297287703505,924.5199301252771,1102.8975765028185,841.0336918149592,874.7550666349757,770.8675143942231,758.7571441351341,676.9117595038325,808.4284050782294,400.0,426.04429996252804,665.5630524251043,962.6466364235397,1017.2931516981237,400.0,804.4589952077613,400.0,734.0725967031606,1012.1619557059184,894.4583651572198,756.9886030776337,413.2304393267524,1088.685030382245,591.0715746944439,400.0,797.562034240461,928.1774551173313,737.1405123189204,560.6098186200911,508.7883835283489,864.4542129776149,882.5922830876917,621.6307052196731,1016.3904561227661,1062.700788633317,676.1162709493731,526.0126603714648,926.5253561688676,761.3029699964947,400.0,616.2642514381739,541.5607409738343,558.316736957261,546.0272530682979,924.9750112761376,1031.73154879413,831.7468691341943,727.30626907043,1174.0882389602202,880.2527921537541,955.4508648500415,585.9379353344788,762.1496911602757,593.6416615174167,434.85690402126966,784.5000302333947,1209.546980549638,739.523404892919,608.784869646201,400.0,542.0585008268424,1017.069025121418,547.2790041727822,1186.810364431598,695.8322280613918,400.0,1016.6989031050276,971.7495963940122,1199.4765015588757],"type":"scatter3d"},{"line":{"color":"red"},"mode":"lines","name":"Best Fit: RT on Frequency","x":[2,90],"y":[2,2],"z":[946.9174543619092,585.5723893707377],"type":"scatter3d"},{"line":{"color":"green"},"mode":"lines","name":"Best Fit: RT on Neighbors","x":[0,0],"y":[2,97],"z":[616.9052953275194,880.1663225520675],"type":"scatter3d"},{"line":{"color":"purple"},"mode":"lines","name":"Best Fit: Neighbors on Frequency","x":[2,90],"y":[53.38204903578134,49.419389828380645],"z":[400.0,400.0],"type":"scatter3d"}],                        {"height":900,"margin":{"b":50,"l":50,"r":50,"t":50},"scene":{"xaxis":{"title":{"text":"Frequency"}},"yaxis":{"title":{"text":"Neighbors"}},"zaxis":{"title":{"text":"RT"}}},"title":{"text":"3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines"},"width":900,"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('b384325a-4ff1-4862-9921-2a59706a6368');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div></div></div>
+</div>
+<hr class="docutils" />
+<p>It can be very usefuln to put the lines of best fit on their respective planes, but we can also plot them in a centered fashion instead.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># Create a scatter plot</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">],</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">],</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span>
+    <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Data Points&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Create line plots for best fit lines</span>
+<span class="n">line_rt_freq</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_rt_freq</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_freq</span><span class="p">),</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">y_rt_freq</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Frequency&quot;</span>
+<span class="p">)</span>
+
+<span class="n">line_rt_neigh</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_rt_neigh</span><span class="p">),</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">x_rt_neigh</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">y_rt_neigh</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: RT on Neighbors&quot;</span>
+<span class="p">)</span>
+
+<span class="n">line_neigh_freq</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">x_neigh_freq</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y_neigh_freq</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_neigh_freq</span><span class="p">),</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Best Fit: Neighbors on Frequency&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Define the layout</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+    <span class="n">scene</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+        <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Neighbors&quot;</span><span class="p">,</span>
+        <span class="n">zaxis_title</span><span class="o">=</span><span class="s2">&quot;RT&quot;</span>
+    <span class="p">),</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Combine traces and plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">scatter</span><span class="p">,</span> <span class="n">line_rt_freq</span><span class="p">,</span> <span class="n">line_rt_neigh</span><span class="p">,</span> <span class="n">line_neigh_freq</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>                            <div id="73e63a43-093e-4953-9b0c-e6ec283584ca" class="plotly-graph-div" style="height:900px; width:900px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("73e63a43-093e-4953-9b0c-e6ec283584ca")) {                    Plotly.newPlot(                        "73e63a43-093e-4953-9b0c-e6ec283584ca",                        [{"marker":{"color":"blue","opacity":0.5,"size":4},"mode":"markers","name":"Data Points","x":[30,62,68,46,50,59,83,33,66,27,38,38,57,61,43,25,43,62,64,34,48,21,8,39,50,24,18,22,56,95,45,51,65,70,63,23,44,40,27,61,91,29,32,51,40,85,39,53,60,51,61,27,94,44,30,38,59,38,81,29,66,41,54,64,42,27,34,54,68,73,71,33,43,81,51,64,41,51,42,51,36,57,41,28,32,41,36,50,49,67,64,23,43,41,45,59,46,44,84,59,40,15,45,36,90,38,36,56,23,72,65,66,60,24,62,48,38,64,55,30,46,23,60,41,76,51,23,75,60,64,59,57,51,71,20,40,29,77,36,48,55,69,40,44,68,50,21,38,44,23,26,42,26,66,100,47,32,42,42,57,72,44,39,47,82,65,38,82,40,49,86,37,52,98,37,34,39,56,53,65,59,74,17,56,51,25,48,88,66,32,61,67,41,24,19,37,45,46,33,56],"y":[59,73,48,29,46,31,29,81,2,66,49,83,53,76,48,51,62,69,55,75,50,63,40,72,71,43,46,25,78,73,27,37,35,55,42,67,32,38,49,49,46,56,94,27,28,40,66,58,27,56,47,67,64,22,60,44,49,45,70,38,28,23,2,29,44,80,54,65,33,26,30,63,38,38,59,41,69,34,81,37,84,41,54,70,46,50,34,75,100,80,61,31,33,44,74,34,40,38,23,45,54,43,58,90,54,19,58,25,44,94,51,62,33,54,50,23,33,48,64,39,68,83,77,86,61,29,53,31,65,64,20,69,39,72,81,55,41,61,72,32,48,43,73,33,27,32,51,77,76,35,60,47,19,57,29,85,61,59,55,59,43,74,45,52,100,40,43,30,33,66,48,43,69,67,39,70,57,75,63,67,81,78,40,54,52,44,53,35,54,55,41,80,28,53,42,43,62,42,47,37],"z":[1131.8369504677262,764.1086688105786,743.6311919414809,896.2364767905896,1001.0553679557099,759.5107421318284,625.339673863014,686.4765362960228,659.3442991048664,1192.1580346522414,1173.370723351219,773.6728706309926,627.3458830496496,1146.4845956758954,604.4768339524328,836.9827349691479,820.5344214440117,574.4655917326587,748.9695532978964,842.9860922735386,400.0,858.157483999518,486.4303060601404,988.7713250937493,476.53176759965163,861.8128390934615,1069.7333558684306,400.0,405.34969805595387,541.5863971626418,643.4619930660242,565.4798324168642,681.4772013608299,580.13880510133,400.0,777.1933278046417,742.1036149893465,400.0,671.7798320931291,749.3410749005686,910.839331660158,862.7070325545585,1048.3769364271861,499.1619267411284,702.8300933321495,965.9088224859772,970.0456765306253,987.6824909233892,400.0,697.7484764534888,839.8398562681045,985.6056411691148,554.4941731513359,528.4518600539283,1112.3197400082704,484.06559328429444,425.07479447590106,707.4481014195263,678.1037227893839,954.8968856612677,624.5551925666143,586.6387843908434,435.28426572649295,611.8876105510178,464.8030261931616,792.0833302656488,917.1066242556778,400.0,810.2531162750067,400.0,655.6531672739397,598.5386476546108,1078.8723956090462,517.2303034934371,470.93575417270955,704.4559158356997,962.1056821153252,491.897972321405,583.1000928712022,900.9310367828134,679.723172492545,655.2917747768345,716.4535808881701,715.7544546717368,434.8407235189442,794.5397406584498,728.1308306852825,1016.4518348952986,1039.3387697234734,451.62254305339917,1035.2631983315205,1043.4794370810137,400.0,1247.63860140228,729.8149410198737,559.658565653597,528.1373364510254,566.1632356601708,783.6420021539368,492.7791626630409,799.4541233913288,519.5739329997012,907.9273082114156,914.7531642289675,811.5152920342559,682.8748619815807,759.2620210614813,649.3784176916985,972.966992339057,628.5098296534331,554.6087533604835,729.2880554028769,591.6864638078504,1117.1262362142745,781.8944344896091,686.41996187999,1064.141678428175,560.4741687846049,875.8418928476777,755.3925156360388,961.7817282061093,547.8073640844556,567.592473295218,1304.2226990168067,716.1523358759708,532.3926010312093,771.2228024239429,715.744873317428,1143.9153413497602,482.15798609135913,554.7045888439263,761.0775134218227,596.147350600025,454.6753113485279,1265.7734149712346,790.6101866330466,598.015512405351,711.8478394820465,774.7602153621714,923.9465797443137,567.0031542006668,714.277233844616,1236.6041283613945,597.4731260698036,977.4681116660781,855.2700462084134,833.9065444331318,734.4734010358966,927.5354519452901,596.3017413639793,796.3775131911738,801.5783030084847,765.276716683043,1066.803547001606,566.6470901735261,419.18764394514733,1235.779974167798,504.3476121806732,414.4291128581692,775.8804378089153,928.872251096592,757.8750305663439,819.1201964643857,997.8332624990766,769.2878831432091,960.2710602616552,812.1440836780798,725.8603778520285,755.012981613104,719.2723745306638,827.9800694697964,944.467733683686,775.3065723161559,905.1879083950517,1009.4882876536915,1094.5112864142682,572.7061643666926,1078.3492327067538,648.6462341594149,765.2908610851259,935.2820617165997,869.6473224005201,1014.2631709356833,455.46701809390345,986.5269113180354,486.6855932564142,792.0988478946834,570.2080846469097,756.1310152851411,840.2013701908962,400.0,622.1660438979549,400.0,891.1766719825412,948.6289096486272,965.1838653457382,605.4063640867723,644.7527487646864,824.9091117555766,400.0],"type":"scatter3d"},{"line":{"color":"red"},"mode":"lines","name":"Best Fit: RT on Frequency","x":[8,100],"y":[51.69,51.69],"z":[853.2186121641038,616.8419640069056],"type":"scatter3d"},{"line":{"color":"green"},"mode":"lines","name":"Best Fit: RT on Neighbors","x":[49.245,49.245],"y":[2,100],"z":[601.9825870770627,888.4778198172005],"type":"scatter3d"},{"line":{"color":"purple"},"mode":"lines","name":"Best Fit: Neighbors on Frequency","x":[8,100],"y":[53.724536340681254,49.18635369205297],"z":[747.2473637592816,747.2473637592816],"type":"scatter3d"}],                        {"height":900,"margin":{"b":50,"l":50,"r":50,"t":50},"scene":{"xaxis":{"title":{"text":"Frequency"}},"yaxis":{"title":{"text":"Neighbors"}},"zaxis":{"title":{"text":"RT"}}},"title":{"text":"3D Scatter plot of RT vs. Frequency and Neighbors with Best Fit Lines"},"width":900,"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('73e63a43-093e-4953-9b0c-e6ec283584ca');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lab-report-part-2">
+<h2>Lab report part 2<a class="headerlink" href="#lab-report-part-2" title="Link to this heading">#</a></h2>
+<ol class="arabic simple" start="2">
+<li><p>Play around with the interactive plot. See if you can discover how to rotate it and how to zoom in and out. Just write a short note about what you find for this answer.</p></li>
+<li><p><strong>CHALLENGE QUESTION</strong>: Briefly describe the logic of using pseudodata. Can you think of other things you could do with pseudodata? Can you think of risks of using pseudodata?</p></li>
+<li><p><strong>CHALLENGE QUESTION</strong>: In the empty code block below, create a 3d scatter plot but substitute Cohorts for one of the variables that you include. Describe how the plot compares to the plot above. Briefly say which variable you chose to remove and why.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># empty code block for the challenge question</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="more-statistical-analysis">
+<h2>More statistical analysis<a class="headerlink" href="#more-statistical-analysis" title="Link to this heading">#</a></h2>
+<p><code style="background:yellow;color:black">If you are not a PhD student and you are not interested in statistics, you can skip the rest of this notebook. This is really just included for those curious about doing more complex stats with Python.</code></p>
+<p>Above, we did a simple multiple regression approach just looking at
+main effects. Let’s add interactions.</p>
+<p><em>Note.</em> In linear regression, adding a constant term allows for the
+inclusion of an intercept in the model. If you don’t include a constant
+term, the regression line will be forced to go through the origin (i.e.,
+(0,0) in the 2D case).</p>
+<p>More technically, without a constant term, the equation for the regression line is:</p>
+<div class="math notranslate nohighlight">
+\[
+y = \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_n x_n
+\]</div>
+<p>With a constant, it becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_n x_n
+\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\beta_0\)</span> is the intercept term.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta_1, \beta_2, \dots, \beta_n\)</span> are coefficients for the predictors <span class="math notranslate nohighlight">\(x_1, x_2, \dots, x_n\)</span>.</p></li>
+</ul>
+<p>By including the intercept (constant term), you’re allowing the regression line to
+best fit the data without the constraint of passing through the origin. In many
+real-world applications, it’s essential to have an intercept, as it represents the
+expected mean value of <span class="math notranslate nohighlight">\(y\)</span> when all <span class="math notranslate nohighlight">\(x\)</span> predictors are 0.</p>
+<p>However, in some specific contexts, you might intentionally skip the intercept if
+you have theoretical or practical reasons to believe that the response should be 0
+when all predictors are 0.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code>, the regression functions do not automatically add an intercept to
+your model, so you have to add it manually using <code class="docutils literal notranslate"><span class="pre">sm.add_constant()</span></code>. In contrast,
+many other packages (like Scikit-learn) do automatically add an intercept.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># first, repeat the regression from above for comparison</span>
+<span class="c1"># Multiple Regression</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Adds a constant term to the predictor</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># NOW DO THE MODEL WITH statsmodels</span>
+
+<span class="c1"># Multiple Regression</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Adds a constant term to the predictor</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                     RT   R-squared:                       0.107
+Model:                            OLS   Adj. R-squared:                  0.094
+Method:                 Least Squares   F-statistic:                     7.843
+Date:                Fri, 27 Sep 2024   Prob (F-statistic):           5.72e-05
+Time:                        11:30:57   Log-Likelihood:                -1346.2
+No. Observations:                 200   AIC:                             2700.
+Df Residuals:                     196   BIC:                             2714.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        727.3768     62.055     11.721      0.000     604.995     849.758
+Frequency     -2.4091      0.797     -3.022      0.003      -3.981      -0.837
+Cohorts       -0.2860      0.939     -0.305      0.761      -2.138       1.566
+Neighbors      2.9619      0.931      3.183      0.002       1.127       4.797
+==============================================================================
+Omnibus:                        7.300   Durbin-Watson:                   2.215
+Prob(Omnibus):                  0.026   Jarque-Bera (JB):                4.022
+Skew:                           0.123   Prob(JB):                        0.134
+Kurtosis:                       2.350   Cond. No.                         387.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>           <td>RT</td>        <th>  R-squared:         </th> <td>   0.107</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.094</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   7.843</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Fri, 27 Sep 2024</td> <th>  Prob (F-statistic):</th> <td>5.72e-05</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>11:30:57</td>     <th>  Log-Likelihood:    </th> <td> -1346.2</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>   200</td>      <th>  AIC:               </th> <td>   2700.</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>   196</td>      <th>  BIC:               </th> <td>   2714.</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     3</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+      <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>const</th>     <td>  727.3768</td> <td>   62.055</td> <td>   11.721</td> <td> 0.000</td> <td>  604.995</td> <td>  849.758</td>
+</tr>
+<tr>
+  <th>Frequency</th> <td>   -2.4091</td> <td>    0.797</td> <td>   -3.022</td> <td> 0.003</td> <td>   -3.981</td> <td>   -0.837</td>
+</tr>
+<tr>
+  <th>Cohorts</th>   <td>   -0.2860</td> <td>    0.939</td> <td>   -0.305</td> <td> 0.761</td> <td>   -2.138</td> <td>    1.566</td>
+</tr>
+<tr>
+  <th>Neighbors</th> <td>    2.9619</td> <td>    0.931</td> <td>    3.183</td> <td> 0.002</td> <td>    1.127</td> <td>    4.797</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 7.300</td> <th>  Durbin-Watson:     </th> <td>   2.215</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.026</td> <th>  Jarque-Bera (JB):  </th> <td>   4.022</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 0.123</td> <th>  Prob(JB):          </th> <td>   0.134</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 2.350</td> <th>  Cond. No.          </th> <td>    387.</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOW DO THE MODEL WITH INTERACTIONS</span>
+
+<span class="c1"># Create interaction terms</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+
+<span class="c1"># Multiple Regression with interaction terms</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Adds a constant term to the predictor</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>           <td>RT</td>        <th>  R-squared:         </th> <td>   0.119</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.092</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   4.359</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Fri, 27 Sep 2024</td> <th>  Prob (F-statistic):</th> <td>0.000376</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>11:30:57</td>     <th>  Log-Likelihood:    </th> <td> -1344.9</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>   200</td>      <th>  AIC:               </th> <td>   2704.</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>   193</td>      <th>  BIC:               </th> <td>   2727.</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     6</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+          <td></td>             <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>const</th>             <td>  504.3622</td> <td>  177.024</td> <td>    2.849</td> <td> 0.005</td> <td>  155.212</td> <td>  853.512</td>
+</tr>
+<tr>
+  <th>Frequency</th>         <td>    1.0089</td> <td>    2.626</td> <td>    0.384</td> <td> 0.701</td> <td>   -4.170</td> <td>    6.188</td>
+</tr>
+<tr>
+  <th>Cohorts</th>           <td>    0.4364</td> <td>    3.570</td> <td>    0.122</td> <td> 0.903</td> <td>   -6.606</td> <td>    7.478</td>
+</tr>
+<tr>
+  <th>Neighbors</th>         <td>    7.4484</td> <td>    3.482</td> <td>    2.139</td> <td> 0.034</td> <td>    0.582</td> <td>   14.315</td>
+</tr>
+<tr>
+  <th>Freq_Cohorts</th>      <td>    0.0051</td> <td>    0.052</td> <td>    0.098</td> <td> 0.922</td> <td>   -0.097</td> <td>    0.108</td>
+</tr>
+<tr>
+  <th>Freq_Neighbors</th>    <td>   -0.0711</td> <td>    0.054</td> <td>   -1.311</td> <td> 0.191</td> <td>   -0.178</td> <td>    0.036</td>
+</tr>
+<tr>
+  <th>Cohorts_Neighbors</th> <td>   -0.0167</td> <td>    0.039</td> <td>   -0.433</td> <td> 0.666</td> <td>   -0.093</td> <td>    0.059</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 7.582</td> <th>  Durbin-Watson:     </th> <td>   2.177</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.023</td> <th>  Jarque-Bera (JB):  </th> <td>   4.156</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 0.131</td> <th>  Prob(JB):          </th> <td>   0.125</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 2.344</td> <th>  Cond. No.          </th> <td>6.25e+04</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br/>[2] The condition number is large, 6.25e+04. This might indicate that there are<br/>strong multicollinearity or other numerical problems.</div></div>
+</div>
+<hr class="docutils" />
+<p><strong>The next code block shows how to print some key parameters from the model…</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+
+<span class="c1"># Create interaction terms</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+
+<span class="c1"># Prepare predictor variables and target variable</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span>
+
+<span class="c1"># Create and fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Print out the coefficients and intercept</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Intercept:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coefficients:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+
+<span class="c1"># To get R^2 and other metrics, you can use:</span>
+<span class="n">r2_score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R^2 Score:&quot;</span><span class="p">,</span> <span class="n">r2_score</span><span class="p">)</span>
+
+<span class="c1"># For mean squared error:</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean Squared Error:&quot;</span><span class="p">,</span> <span class="n">mse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept: 504.3622454373914
+Coefficients: [ 1.00887120e+00  4.36423894e-01  7.44842045e+00  5.07052549e-03
+ -7.11031833e-02 -1.66794835e-02]
+R^2 Score: 0.11933244361738982
+Mean Squared Error: 40571.89433249814
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>The next code block shows how to get the same values plus p-values in a more readable form.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Create interaction terms</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cohorts&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">]</span>
+
+<span class="c1"># Prepare predictor variables and target variable</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;RT&#39;</span><span class="p">]</span>
+
+<span class="c1"># Create and fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Getting coefficients, intercept, and other metrics</span>
+<span class="n">coefficients</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span>
+<span class="n">intercept</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculating p-values for coefficients</span>
+<span class="n">X_with_const</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">ols_model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_with_const</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">p_values</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># exclude intercept</span>
+
+<span class="c1"># Creating a summary dataframe</span>
+<span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Coefficient&quot;</span><span class="p">:</span> <span class="n">coefficients</span><span class="p">,</span> 
+                           <span class="s2">&quot;P-Value&quot;</span><span class="p">:</span> <span class="n">p_values</span><span class="p">})</span>
+<span class="n">summary_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Cohorts&#39;</span><span class="p">,</span> <span class="s1">&#39;Freq_Neighbors&#39;</span><span class="p">,</span> <span class="s1">&#39;Cohorts_Neighbors&#39;</span><span class="p">]</span>
+<span class="n">summary_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Intercept&#39;</span><span class="p">,</span> <span class="s1">&#39;Coefficient&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">intercept</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary_df</span><span class="p">)</span>
+
+<span class="c1"># Additional metrics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">R^2:&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean Squared Error:&quot;</span><span class="p">,</span> <span class="n">mse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   Coefficient   P-Value
+Frequency             1.008871  0.701255
+Cohorts               0.436424  0.902841
+Neighbors             7.448420  0.033661
+Freq_Cohorts          0.005071  0.922338
+Freq_Neighbors       -0.071103  0.191485
+Cohorts_Neighbors    -0.016679  0.665770
+Intercept           504.362245       NaN
+
+R^2: 0.11933244361738982
+Mean Squared Error: 40571.89433249814
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_bayes-theorem-rev.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Bayes’ theorem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_swr-bayes-004.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">More on mathematical models: Statistical models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slight-tangent-pseudo-data">A slight tangent: Pseudo data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-the-data">Visualize the data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-report-part-1">Lab report part 1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-3d">Visualization: 3D</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-our-3d-plot">Improving our 3D plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-interactive-3d-plot">An interactive 3D plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-report-part-2">Lab report part 2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-statistical-analysis">More statistical analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By James Magnuson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

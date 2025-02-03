@@ -1,0 +1,1265 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Neural networks, Part 4 &#8212; Models of the Mind</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '14_nnets-04-srn-statlearn';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Neural networks, Part 3 – training networks for non-linearly separable mappings" href="13_nnets-03-learning-xor.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Models of the Mind - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Models of the Mind - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    models-of-the-mind-notebooks
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_python-jupyter-overview.html">Models of the Mind, 2024</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01_game-of-life.html">Conway’s “Game of Life”</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="02a_math-probability-matching.html"><font color="red">LAB REPORT</font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02b_math-probability-matching.html">PROBABILITY MATCHING, PART 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_agent-probability-matching.html">PROBABILITY MATCHING, PART 3</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="04_probability-review.html">Preliminaries: Understanding Logical Symbols in Probability</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem-rev.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_pseudo-swr-analysis.html">More on mathematical models: Statistical models</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="07_swr-bayes-004.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="08_trace-swr.html">Implementations of the TRACE model</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="10_netsci-01.html">Network Science Overview</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="11_nnets-01-linear-functions-and-bias.html">Neural networks, Part 1: Linear logic functions as networks</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="12_nnets-02-training-linear-networks.html">Neural networks, Part 2 – training networks</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="13_nnets-03-learning-xor.html">Neural networks, Part 3 – training networks for non-linearly separable mappings</a></li>
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Neural networks, Part 4</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F14_nnets-04-srn-statlearn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/14_nnets-04-srn-statlearn.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Neural networks, Part 4</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#human-statistical-learning-a-publication-level-example"><em>Human Statistical Learning: a publication-level example</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#note-statistical-learning-means-different-things-in-different-fields">Note: ‘statistical learning’ means different things in different fields</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-statistical-learning">Simulating statistical learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feedforward-network">Feedforward network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-it-a-simple-recurrent-network-srn">Making it a Simple Recurrent Network (SRN)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-assessing-learning">A note: Assessing learning</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-details-about-the-srn-architecture">Some details about the SRN architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#skip-this-section-if-you-are-not-interested-in-this-level-of-detail"><em>Skip this section if you are not interested in this level of detail.</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-error-signal-in-the-context-of-sigmoid-activation-and-cross-entropy-loss">Understanding error signal in the context of sigmoid activation and <em>Cross-Entropy Loss</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-entropy-loss-for-multi-class-classification">Cross-Entropy Loss for <em>Multi-Class</em> Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sigmoid-activation-function">Sigmoid Activation Function:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Cross-Entropy Loss for Multi-Class Classification:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#derivative-of-cross-entropy-loss">Derivative of Cross-Entropy Loss:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-class-setting">Multi-Class Setting:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sigmoid-activation">Sigmoid Activation:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-entropy-loss-for-multi-class-one-hot-targets">Cross-Entropy Loss for Multi-Class (One-Hot Targets):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-signal">Error Signal:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-up-the-srn">Coding up the SRN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-needed-libraries">Import needed libraries</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-routines">Plotting routines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-functions">Network functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-code">Using the code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ideas-for-exploration"><font color="red">Ideas for exploration</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-we-could-move-something-like-this-to-publication">How we could move something like this to publication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ambitious-challenge-questions"><font color="red">Ambitious challenge questions</font></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="alert alert-block alert-info">
+This tutorial is only for your fun / edification. No need to answer any lab questions you may find. 
+</div><section class="tex2jax_ignore mathjax_ignore" id="neural-networks-part-4">
+<h1>Neural networks, Part 4<a class="headerlink" href="#neural-networks-part-4" title="Link to this heading">#</a></h1>
+<section id="human-statistical-learning-a-publication-level-example">
+<h2><em>Human Statistical Learning: a publication-level example</em><a class="headerlink" href="#human-statistical-learning-a-publication-level-example" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<p>This notebook contains a nearly-complete implementation of a full training and analysis pipeline for a real domain of research in cognitive science: human <strong>statistical learning</strong>.</p>
+<p>I will give an overview of this domain in class.</p>
+<p>The basic idea is that if you expose a human (infant, child, or adult) to a stream of seemingly random syllables, but actually there is statistical structure to the syllables, they become sensitive to those statistics.</p>
+<p>In a classic study in <em>Science</em> in 1996, Jenny Saffran, Elissa Newport, and Dick Aslin presented 4-month-old infants with a 2-minute stream of syllables. They were auditory, but we can get a sense of how strange the input was by spelling it out (I’ve addded a few spaces to allow it to wrap, but there were no pauses in the input in the study):</p>
+<p><code class="docutils literal notranslate"><span class="pre">tokibugikobagopilatipolutokibu</span> <span class="pre">gopilatipolutokibugikobagopila</span> <span class="pre">gikobatokibugopilatipolugikobatipolugikobatipolugopila</span> <span class="pre">tipolutokibugopilatipolutokibugopilatipolutokibugopilagikoba</span> <span class="pre">tipolutokibugopilagikobatipolugikobatipolugikobatipolu</span> <span class="pre">tokibugikobagopilatipolugikobatokibugopila</span></code></p>
+<p>Although it sounds essentially random, it has 4 “word-like” patterns that repeat: <code class="docutils literal notranslate"><span class="pre">tokibu</span></code>, <code class="docutils literal notranslate"><span class="pre">gikoba</span></code>, <code class="docutils literal notranslate"><span class="pre">gopila</span></code>, <code class="docutils literal notranslate"><span class="pre">tipolu</span></code>. The words were in random order, with the constraint that a word could not repeat immediately. This mean that <em>transitional probabilities</em> were 1.0 within words (<code class="docutils literal notranslate"><span class="pre">ki</span></code> always follows <code class="docutils literal notranslate"><span class="pre">to</span></code>, and <code class="docutils literal notranslate"><span class="pre">bu</span></code> always follows <code class="docutils literal notranslate"><span class="pre">ki</span></code>) but 0.33 between words (<code class="docutils literal notranslate"><span class="pre">bu</span></code> was equally likely to be followed by <code class="docutils literal notranslate"><span class="pre">gi</span></code>, <code class="docutils literal notranslate"><span class="pre">go</span></code>, or <code class="docutils literal notranslate"><span class="pre">ti</span></code>).</p>
+<p>After 2 minutes of exposure, Saffran et al. tested babies’ sensitivity to the statistical structure. They did this by sometimes playing one of the words from the mini-language over a speaker (e.g., the infant might hear <code class="docutils literal notranslate"><span class="pre">tokibu</span></code> repeated over and over), and sometimes playing a “part-word” made up of the last syllable of one word and the first 2 syllables of another (e.g., <code class="docutils literal notranslate"><span class="pre">lagiko</span></code>). They then measured how long the infants looked at the speaker while it was playing words vs. part-words. On average, infants looked significnatly longer at part-words (a so-called <em>novelty preference</em>).</p>
+<p>With adults, we can just play them a word and a part-word and ask ‘which sounds more like what you were hearing earlier?’</p>
+<p>French et al. (2011) proposed a way to standardize across statistical learning studies with humans and computer models: a metric they called <strong>proportion better</strong>. Here you take your measure for words and subtract your measure for part-words (or vice versa when subjects show a novelty preference) and then divide by their sum.</p>
+<p>We can apply this with looking time by taking the difference in looking time over the sum: <span class="math notranslate nohighlight">\((7.6-6.8) / (7.6+6.8) = 0.06\)</span>.</p>
+<p>With a neural network trained to process these kinds of items, we can look at how much error it makes predicting words vs. part-words.</p>
+<p>We can also use the amount of error to simulate trial-by-trial performance. We can take the error for a word, and compare it to the error for each part-word. Every time error is lower on the word, that’s a case where the word is better. We do all the word-to-part-word comparisons and calculate <strong>word choices</strong>.</p>
+<div class="alert alert-block alert-info">
+<section id="note-statistical-learning-means-different-things-in-different-fields">
+<h3>Note: ‘statistical learning’ means different things in different fields<a class="headerlink" href="#note-statistical-learning-means-different-things-in-different-fields" title="Link to this heading">#</a></h3>
+<p>There is an unfortunate interdisciplinary jargon conflict here. In computer science / engineering / artificial intelligence, ‘statistical learning’ is more or less a synonym for ‘machine learning’. Psychologists appropriated this term to mean learning that appears to happen in an implicit way, based on statistical structure in some kind of information.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="simulating-statistical-learning">
+<h2>Simulating statistical learning<a class="headerlink" href="#simulating-statistical-learning" title="Link to this heading">#</a></h2>
+<p>So let’s work towards trying to simulate performance in this task. We could try using a feedforward network or a simple recurrent network.</p>
+</section>
+<section id="feedforward-network">
+<h2>Feedforward network<a class="headerlink" href="#feedforward-network" title="Link to this heading">#</a></h2>
+<p>Here’s a schematic of a feedforward network (FFN). The dots within layers indicate that there could be arbitrarily many nodes within each layer. Note that connections only go ‘forward’, from the input towards the output. FFNs are typically trained just to do input-output mappings such as ‘evaluate the truth value of these inputs with respect to the XOR function’ or ‘classify this image as a dog or a cat’. However, we could also try to train an FFN on sequences; for example, we could make the input-ouput mapping ‘given the current input, try to output the next element in the sequence’. The FFN will be limited to learning the transitional probabilities from one element to another; it will not be able to learn to make predictions based on the previous input and the current input, for example.</p>
+<div>
+<img src="figs/ff-tikz.png" width="500"/>
+</div>
+</section>
+<section id="making-it-a-simple-recurrent-network-srn">
+<h2>Making it a Simple Recurrent Network (SRN)<a class="headerlink" href="#making-it-a-simple-recurrent-network-srn" title="Link to this heading">#</a></h2>
+<p>To make an SRN, we add <strong>Context</strong> nodes that provide additional inputs to the hidden layer at each time step. These special nodes get their states via special <em>copy-back</em> connections from the hidden nodes. These are 1-to-1 connections: <span class="math notranslate nohighlight">\(Hid_1\)</span> connects only to <span class="math notranslate nohighlight">\(Context_1\)</span>, <span class="math notranslate nohighlight">\(Hid_2\)</span> connects only to <span class="math notranslate nohighlight">\(Context_2\)</span>, etc. (<span class="math notranslate nohighlight">\(Hid_n\)</span> connects only to <span class="math notranslate nohighlight">\(Context_n\)</span>). The weights on the copy-back links are always 1.0 so that we simply copy the activation values of the hidden layer at the previous time step.</p>
+<p>However, the context nodes are fully connected to the hidden layer – every context node has a trainable, weighted connection to every hidden node.</p>
+<div>
+<img src="figs/srn-tikz.png" width="500"/>
+</div>
+<p>This gives the network the capability of developing senstivity to sequential information. It is not limited to just one step back in time, though, because it can adjust the context-to-hidden weights (as well as input-to-hidden weights) such that it can preserve information going back possibly many steps, in a context-sensitive way (here ‘context’ is meant in its generic sense, not just with respect to the context nodes).</p>
+<p>The SRN will be able to learn not just simple transitional probabilities between adjacent elements in sequences, but also dependencies based on several time steps. For example, if A can be followed by B, C, or D, but then the next element after that is always E (e.g., ABE, ACE, ADE), the network will learn that contingency readily (even if B, C and E can be followed by other items in different contexts, e.g., JBF, KBH, LCM, etc.).</p>
+<p>Jeff Elman originally developed SRNs in the late 1980s, with the first publications in 1990 and 1991. He trained them to do <em>next-item prediction</em>: given the current element in a sequence, predict the next one. This could be ‘predict the next phoneme given the current phoneme’ or ‘predict the next word given the current word’. This is the basis for contemporary ‘large language models’ (like Chat-GPT) – they also do next-word prediction.</p>
+<p>Why are they called <em>simple</em> recurrent networks? This is in contrast to (fully) recurrent networks, that hold store many, many previous states (in some cases many thousands). There are special algorithms for training them (<em>backpropagation through time</em>, or BPTT), but they are very memory intensive and difficult to analyze and understand. The SRN is simple in the sense that it just holds onto 1 time step, and copies it essentially into the input. This allows the weighted connections (all the solid lines in the diagram above) to be trained using regular backpropagation of error. It’s a truly simple innovation, but it has proved to be incredibly powerful.</p>
+<div class="alert alert-block alert-info">
+<section id="a-note-assessing-learning">
+<h3>A note: Assessing learning<a class="headerlink" href="#a-note-assessing-learning" title="Link to this heading">#</a></h3>
+<p>In the statistical learning task described above, it is impossible to perform perfectly and make no errors. An optimal, ideal system would make no errors <em>within</em> words, where the second and third syllables are perfectly predictable, but could not perfectly predict what comes next. This is because after the final syllable of a word, the next syllable will be the first syllable of one of the other three words, selected at random. Thus, an optimal, ideal system would make no error within words, but the best it could do at word boundaries would be to activate the first syllables of the other three words equally.</p>
+</div>
+</section>
+<section id="some-details-about-the-srn-architecture">
+<h3>Some details about the SRN architecture<a class="headerlink" href="#some-details-about-the-srn-architecture" title="Link to this heading">#</a></h3>
+<p>We will build an SRN below. There are a few details to highlight.</p>
+<ul class="simple">
+<li><p>We will train a network by presenting it with ‘symbols’ that represent different syllables. For example, if we have 12 syllables (like Saffran et al. did, with their 4 three-syllable words), we would have 12 input nodes. Each would stand for a different syllable. We would also then have 12 outputs – again, one for each syllable. The network’s task will be to try to activate the output node for the next syllable in response to the input node for the current syllable.</p></li>
+<li><p>We will use <span class="math notranslate nohighlight">\(tanh\)</span> (hyperbolic tangent) activation function in the hidden layer, like we did for the XOR network we trained in the previous notebook.</p></li>
+<li><p>We will use the <span class="math notranslate nohighlight">\(sigmoid\)</span> activation function for the output layer, again like we did for XOR.</p></li>
+<li><p>We will include a bias node that has a connection to every hidden node. If you explore the code, you will find that the network will still learn just fine if you eliminate it; however, it tends to learn faster with it.</p></li>
+<li><p>We will use an extremely similar weight-update algorithm as in the single-output XOR network, even though we will have 12 outputs. The next section explains this.</p></li>
+</ul>
+<hr class="docutils" />
+<div class="alert alert-block alert-info">
+</section>
+<section id="skip-this-section-if-you-are-not-interested-in-this-level-of-detail">
+<h3><em>Skip this section if you are not interested in this level of detail.</em><a class="headerlink" href="#skip-this-section-if-you-are-not-interested-in-this-level-of-detail" title="Link to this heading">#</a></h3>
+</section>
+<section id="understanding-error-signal-in-the-context-of-sigmoid-activation-and-cross-entropy-loss">
+<h3>Understanding error signal in the context of sigmoid activation and <em>Cross-Entropy Loss</em><a class="headerlink" href="#understanding-error-signal-in-the-context-of-sigmoid-activation-and-cross-entropy-loss" title="Link to this heading">#</a></h3>
+<p>In a neural network with sigmoid activation and cross-entropy loss, the calculation of the error signal is quite straightforward and elegant due to the properties of these functions.</p>
+<ol class="arabic simple">
+<li><p><strong>Sigmoid Activation Function</strong>:
+The sigmoid function, defined as <span class="math notranslate nohighlight">\(\sigma(x) = \frac{1}{1 + e^{-x}}\)</span>, outputs a value between 0 and 1. This output is typically interpreted as the probability of the positive class in binary classification.</p></li>
+<li><p><strong>Cross-Entropy Loss</strong>:
+For binary classification, cross-entropy loss is defined as:
+$<span class="math notranslate nohighlight">\( L = -[y \log(p) + (1-y) \log(1-p)] \)</span><span class="math notranslate nohighlight">\(
+where \)</span>y<span class="math notranslate nohighlight">\( is the true label (0 or 1), and \)</span>p$ is the predicted probability (output of the sigmoid function).</p></li>
+<li><p><strong>Derivative of Cross-Entropy Loss</strong>:
+The derivative of the cross-entropy loss with respect to the input of the sigmoid function (which is the raw output of the network before applying the sigmoid) simplifies beautifully when combined with the derivative of the sigmoid function itself. The derivative of the sigmoid function <span class="math notranslate nohighlight">\(\sigma(x)\)</span> is <span class="math notranslate nohighlight">\(\sigma(x) (1 - \sigma(x))\)</span>. Applying the chain rule, the derivative of the loss with respect to the raw output ends up being the simple difference between the predicted probability and the actual target:
+$<span class="math notranslate nohighlight">\( p - y \)</span>$</p></li>
+</ol>
+<p>This simplification, where the error signal is just the difference between the predicted probability and the actual target, is one of the key reasons why the combination of sigmoid activation and cross-entropy loss is popular, especially for binary classification tasks. It leads to a more stable and efficient training process compared to using mean squared error with sigmoid activation, as the gradient is more responsive even when the predicted probability is close to the actual label.</p>
+<p>Thus, when the error signal is calculated as <code class="docutils literal notranslate"><span class="pre">output_vec</span> <span class="pre">-</span> <span class="pre">target_vec</span></code> in the backpropagation algorithm, it effectively uses the derivative of the cross-entropy loss with respect to the network’s output. This approach provides the correct gradient for weight updates in a network using sigmoid outputs and cross-entropy loss.</p>
+<p><strong>However, we are not doing simple binary classification – we have 12 possible outputs. How does this still work?</strong></p>
+</section>
+<section id="cross-entropy-loss-for-multi-class-classification">
+<h3>Cross-Entropy Loss for <em>Multi-Class</em> Classification<a class="headerlink" href="#cross-entropy-loss-for-multi-class-classification" title="Link to this heading">#</a></h3>
+<p>In a neural network designed for multi-class classification with 12 categories, using sigmoid activation for each category and cross-entropy loss, the error signal computation is slightly more complex than in binary classification but still maintains a straightforward approach.</p>
+<section id="sigmoid-activation-function">
+<h4>Sigmoid Activation Function:<a class="headerlink" href="#sigmoid-activation-function" title="Link to this heading">#</a></h4>
+<p>In multi-class classification with 12 categories, each output neuron corresponds to one category. The sigmoid function is applied to each neuron’s output, giving a probability-like value between 0 and 1. However, it’s important to note that these values don’t necessarily sum up to 1 across all categories (unlike softmax activation which is often used in multi-class classification).</p>
+</section>
+<section id="id1">
+<h4>Cross-Entropy Loss for Multi-Class Classification:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>The cross-entropy loss in multi-class classification is a generalization of the binary case. It’s actually simpler. It is defined as:</p>
+<div class="math notranslate nohighlight">
+\[ L = -\sum_{c=1}^{n} y_c \log(p_c) \]</div>
+<p>where <span class="math notranslate nohighlight">\( n \)</span> is the number of classes (12 in our case), <span class="math notranslate nohighlight">\( y_c \)</span> is 1 if the true category is <span class="math notranslate nohighlight">\( c \)</span> and 0 otherwise (one-hot encoded), and <span class="math notranslate nohighlight">\( p_c \)</span> is the predicted probability for category <span class="math notranslate nohighlight">\( c \)</span>. This loss function calculates a separate loss for each category and then sums them up.</p>
+<p>However,</p>
+</section>
+<section id="derivative-of-cross-entropy-loss">
+<h4>Derivative of Cross-Entropy Loss:<a class="headerlink" href="#derivative-of-cross-entropy-loss" title="Link to this heading">#</a></h4>
+<p>Just as in the binary case, the error signal in the multi-class scenario can be calculated elegantly. The derivative of the cross-entropy loss with respect to the input of the sigmoid function for each category is the difference between the predicted probability and the actual target for that category:</p>
+<div class="math notranslate nohighlight">
+\[ p_c - y_c \]</div>
+<p>for each category <span class="math notranslate nohighlight">\( c \)</span>.</p>
+<p>Therefore, in a 12-category classification task, the error signal for each category (neuron) in the output layer is the difference between the neuron’s activation (interpreted as the predicted probability for that category) and the corresponding value in the one-hot encoded target vector. This error signal is then used in backpropagation to update the weights.</p>
+<p>However, we can also keep the code we used previously; the binary case actually works fine so long as we sum the loss over each output node. This works because the targets (syllables) are one-hot encoded, representing multiple classes (different syllables), and the network predicts the probability of each class (syllable) independently. Let’s clarify this:</p>
+</section>
+<section id="multi-class-setting">
+<h4>Multi-Class Setting:<a class="headerlink" href="#multi-class-setting" title="Link to this heading">#</a></h4>
+<p>Each syllable in our lexicon is a separate class or category. The network essentially predicts the probability of each syllable being the next one in the sequence. The output layer has as many nodes as there are unique syllables, with each node corresponding to a particular syllable.</p>
+</section>
+<section id="sigmoid-activation">
+<h4>Sigmoid Activation:<a class="headerlink" href="#sigmoid-activation" title="Link to this heading">#</a></h4>
+<p>The sigmoid function is applied to the input of each output node, providing a probability-like score for each syllable. Unlike softmax, which normalizes outputs across all classes to sum up to 1, the sigmoid function treats each output independently. This means the network predicts the likelihood of each syllable independently, not as a mutually exclusive set.</p>
+</section>
+<section id="cross-entropy-loss-for-multi-class-one-hot-targets">
+<h4>Cross-Entropy Loss for Multi-Class (One-Hot Targets):<a class="headerlink" href="#cross-entropy-loss-for-multi-class-one-hot-targets" title="Link to this heading">#</a></h4>
+<p>The cross-entropy loss is calculated for each neuron (syllable) independently and then summed up. This is appropriate for our case where each target is a one-hot encoded vector, representing the correct syllable. The loss function penalizes the network for the difference between its predicted probability and the actual target (1 for the correct syllable, 0 for others).</p>
+</section>
+<section id="error-signal">
+<h4>Error Signal:<a class="headerlink" href="#error-signal" title="Link to this heading">#</a></h4>
+<p>For each node, the error signal (used in backpropagation) is the difference between the predicted probability (output of the sigmoid function) and the actual target in the one-hot encoded vector. This guides the network to increase the probability for the correct syllable and decrease it for the others.</p>
+<p>Thus, even though the setup looks similar to binary classification, it’s actually a multi-class classification where each class (syllable) is treated independently. The network learns to predict the likelihood of each syllable in the lexicon, and the cross-entropy loss function is an effective choice for this kind of problem.</p>
+<p><strong>Summary</strong>. This process efficiently directs the network to adjust its predictions towards the actual distribution of the categories, provided by the one-hot encoded target vectors. The cross-entropy loss function in conjunction with sigmoid activation remains an effective choice for multi-class classification due to its ability to penalize incorrect predictions robustly and guide the network towards accurate category probabilities.</p>
+</div></section>
+</section>
+</section>
+<section id="coding-up-the-srn">
+<h2>Coding up the SRN<a class="headerlink" href="#coding-up-the-srn" title="Link to this heading">#</a></h2>
+<p>Note that the code below uses a fairly simple approach, just using the basic <code class="docutils literal notranslate"><span class="pre">numpy</span></code> package for numeric processing in Python. There are more powerful approaches, such as using PyTorch to make use of Facebook AI’s Torch toolkit, or Keras along with Torch, TensorFlow, or JAX.</p>
+<section id="import-needed-libraries">
+<h3>Import needed libraries<a class="headerlink" href="#import-needed-libraries" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">patches</span>
+<span class="kn">import</span> <span class="nn">time</span> 
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="plotting-routines">
+<h2>Plotting routines<a class="headerlink" href="#plotting-routines" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_training_progress</span><span class="p">(</span><span class="n">loss_history</span><span class="p">,</span> <span class="n">word_choices_history</span><span class="p">,</span> <span class="n">prop_better_history</span><span class="p">,</span> \
+                           <span class="n">combined_input_target_output_matrix</span><span class="p">,</span> <span class="n">combined_hidden_context_matrix</span><span class="p">,</span> \
+                           <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">loss_lexicon_history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Create a GridSpec for layout</span>
+    <span class="c1"># gs = fig.add_gridspec(5, 3, width_ratios=[2, 1, 0.1], height_ratios=[3, 2, 5, 5, 5])</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+    <span class="c1"># Plot loss</span>
+    <span class="n">ax_loss</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loss_history</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">loss_lexicon_history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Plot red points for loss_lexicon (test loss)</span>
+        <span class="n">epochs_with_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">loss</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loss_lexicon_history</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">loss</span><span class="p">)]</span>
+        <span class="n">test_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">loss</span> <span class="k">for</span> <span class="n">loss</span> <span class="ow">in</span> <span class="n">loss_lexicon_history</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">loss</span><span class="p">)]</span>
+        <span class="n">ax_loss</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">epochs_with_test</span><span class="p">,</span> <span class="n">test_losses</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;violet&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Testing&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># Adding grey dashed lines at y=0</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Cross-Entropy Loss&#39;</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Loss vs Epochs, EPOCH </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    
+    <span class="c1"># New subplot for proportion_better and word_choices</span>
+    <span class="n">ax_tests</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prop_better_history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1">#ax_tests.plot(range(1, len(prop_better_history) + 1), prop_better_history, &#39;r.&#39;, markersize=10, label=&#39;Proportion Better&#39;)</span>
+        <span class="c1"># Plotting both points and a connecting line</span>
+        <span class="c1"># ax_tests.plot(range(1, len(prop_better_history) + 1), prop_better_history, &#39;r.-&#39;, label=&#39;Proportion Better&#39;, markersize=5)  # Connecting line with points</span>
+        <span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop_better_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax_tests</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">prop_better_history</span><span class="p">,</span> <span class="s1">&#39;r.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Proportion Better&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Plotting line separately, ignoring NaNs</span>
+        <span class="n">non_nan_indices</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">prop_better_history</span><span class="p">)</span>
+        <span class="n">ax_tests</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">epochs</span><span class="p">)[</span><span class="n">non_nan_indices</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">prop_better_history</span><span class="p">)[</span><span class="n">non_nan_indices</span><span class="p">],</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>  <span class="c1"># Connecting line for non-NaN segments</span>
+
+    <span class="k">if</span> <span class="n">word_choices_history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_choices_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax_tests</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_choices_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">word_choices_history</span><span class="p">,</span> <span class="s1">&#39;b.&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Word Choices&#39;</span><span class="p">)</span>
+        <span class="c1"># Plotting line separately, ignoring NaNs</span>
+        <span class="n">non_nan_indices</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">word_choices_history</span><span class="p">)</span>
+        <span class="n">ax_tests</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">epochs</span><span class="p">)[</span><span class="n">non_nan_indices</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">word_choices_history</span><span class="p">)[</span><span class="n">non_nan_indices</span><span class="p">],</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>  <span class="c1"># Connecting line for non-NaN segments</span>
+    <span class="c1"># Adding grey dashed lines at y=0 and y=0.5</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;mistyrose&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Test Metrics&#39;</span><span class="p">)</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Test Performance Metrics&#39;</span><span class="p">)</span>
+    <span class="n">ax_tests</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="c1"># Plotting the heatmap for Input, Target, and Output</span>
+    <span class="n">ax_input_target_output_heatmap</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">input_target_output_heatmap</span> <span class="o">=</span> <span class="n">ax_input_target_output_heatmap</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">combined_input_target_output_matrix</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax_input_target_output_heatmap</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input, Target &amp; Output Vectors&#39;</span><span class="p">)</span>
+    <span class="n">ax_input_target_output_heatmap</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax_input_target_output_heatmap</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;Input&#39;</span><span class="p">,</span> <span class="s1">&#39;Target&#39;</span><span class="p">,</span> <span class="s1">&#39;Output&#39;</span><span class="p">])</span>
+    <span class="n">ax_input_target_output_heatmap_cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">input_target_output_heatmap</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">ax_input_target_output_heatmap_cbar</span><span class="p">)</span>
+
+    <span class="c1"># Plot combined hidden-context heatmap</span>
+    <span class="n">ax_hidden_context_heatmap</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">hidden_context_heatmap</span> <span class="o">=</span> <span class="n">ax_hidden_context_heatmap</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">combined_hidden_context_matrix</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax_hidden_context_heatmap</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hidden &amp; Context States&#39;</span><span class="p">)</span>
+    <span class="n">ax_hidden_context_heatmap</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax_hidden_context_heatmap</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;Hidden&#39;</span><span class="p">,</span> <span class="s1">&#39;Context&#39;</span><span class="p">])</span>
+    <span class="n">ax_hidden_context_heatmap_cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">hidden_context_heatmap</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">ax_hidden_context_heatmap_cbar</span><span class="p">)</span>
+
+    <span class="c1"># Plot input-to-hidden weight matrix heatmap</span>
+    <span class="n">ax_input_hidden_heatmap</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">input_hidden_heatmap</span> <span class="o">=</span> <span class="n">ax_input_hidden_heatmap</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax_input_hidden_heatmap</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input-to-Hidden Weights&#39;</span><span class="p">)</span>
+    <span class="n">ax_input_hidden_heatmap_cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">input_hidden_heatmap</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">ax_input_hidden_heatmap_cbar</span><span class="p">)</span>
+
+    <span class="c1"># Plot context-to-hidden weight matrix heatmap</span>
+    <span class="n">ax_context_hidden_heatmap</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">context_hidden_heatmap</span> <span class="o">=</span> <span class="n">ax_context_hidden_heatmap</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax_context_hidden_heatmap</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Context-to-Hidden Weights&#39;</span><span class="p">)</span>
+    <span class="n">ax_context_hidden_heatmap_cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">context_hidden_heatmap</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">ax_context_hidden_heatmap_cbar</span><span class="p">)</span>
+
+    <span class="c1"># Plot hidden-to-output weight matrix heatmap</span>
+    <span class="n">ax_hidden_output_heatmap</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">hidden_output_heatmap</span> <span class="o">=</span> <span class="n">ax_hidden_output_heatmap</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax_hidden_output_heatmap</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hidden-to-Output Weights&#39;</span><span class="p">)</span>
+    <span class="n">ax_hidden_output_heatmap_cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">hidden_output_heatmap</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">ax_hidden_output_heatmap_cbar</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="network-functions">
+<h2>Network functions<a class="headerlink" href="#network-functions" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># Function to process the lexicon and map syllables to indices</span>
+<span class="k">def</span> <span class="nf">process_lexicon</span><span class="p">(</span><span class="n">lexicon</span><span class="p">):</span>
+    <span class="n">unique_syllables</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lexicon</span><span class="p">)))</span>
+    <span class="n">syllable_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">syllable</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">syllable</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_syllables</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">unique_syllables</span><span class="p">,</span> <span class="n">syllable_to_index</span>
+
+<span class="k">def</span> <span class="nf">initialize_network</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">nhidden</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">wmean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wsd</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">syllable_to_index</span> <span class="o">=</span> <span class="n">process_lexicon</span><span class="p">(</span><span class="n">lexicon</span><span class="p">)</span>
+    <span class="n">n_syllables</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">syllable_to_index</span><span class="p">)</span>
+    
+    <span class="c1"># if nhidden == None, set nhidden to by n_syllables</span>
+    <span class="n">nhidden</span> <span class="o">=</span> <span class="n">nhidden</span> <span class="ow">or</span> <span class="n">n_syllables</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
+        <span class="n">W_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_syllables</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>
+        <span class="n">W_context_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nhidden</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># New weights</span>
+        <span class="n">W_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nhidden</span><span class="p">,</span> <span class="n">n_syllables</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>
+        <span class="n">hidden_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nhidden</span><span class="p">)</span>
+        <span class="n">W_bias_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nhidden</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># Bias weights</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">W_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">wmean</span><span class="p">,</span> <span class="n">wsd</span><span class="p">,</span> <span class="p">(</span><span class="n">n_syllables</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">))</span>
+        <span class="n">W_context_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">wmean</span><span class="p">,</span> <span class="n">wsd</span><span class="p">,</span> <span class="p">(</span><span class="n">nhidden</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">))</span>
+        <span class="n">W_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">wmean</span><span class="p">,</span> <span class="n">wsd</span><span class="p">,</span> <span class="p">(</span><span class="n">nhidden</span><span class="p">,</span> <span class="n">n_syllables</span><span class="p">))</span>
+        <span class="n">W_bias_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">wmean</span><span class="p">,</span> <span class="n">wsd</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">)</span>
+        <span class="n">hidden_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nhidden</span><span class="p">)</span>
+        
+
+    <span class="k">return</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span>
+
+<span class="k">def</span> <span class="nf">save_weights</span><span class="p">(</span><span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">filename_prefix</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_input_hidden.npy&#39;</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_bias_hidden.npy&#39;</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_context_hidden.npy&#39;</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_hidden_output.npy&#39;</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Weights saved successfully.&quot;</span><span class="p">)</span>
+    <span class="c1"># Example of saving weights</span>
+    <span class="c1"># save_weights(W_input_hidden, W_bias_hidden, W_context_hidden, W_hidden_output, &#39;network_weights&#39;)</span>
+
+
+<span class="k">def</span> <span class="nf">load_weights</span><span class="p">(</span><span class="n">filename_prefix</span><span class="p">):</span>
+    <span class="n">W_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_input_hidden.npy&#39;</span><span class="p">)</span>
+    <span class="n">W_bias_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_bias_hidden.npy&#39;</span><span class="p">)</span>
+    <span class="n">W_context_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_context_hidden.npy&#39;</span><span class="p">)</span>
+    <span class="n">W_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename_prefix</span><span class="si">}</span><span class="s1">_hidden_output.npy&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Weights loaded successfully.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span>
+
+    
+<span class="c1">#def binary_cross_entropy_loss(y_true, y_pred):</span>
+<span class="k">def</span> <span class="nf">cross_entropy_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_pred</span> <span class="o">+</span> <span class="mf">1e-15</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_true</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_pred</span> <span class="o">+</span> <span class="mf">1e-15</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">multi_cross_entropy_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="c1"># Ensure small value is added to y_pred to avoid log(0)</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-15</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">)</span>
+
+    <span class="c1"># Calculate cross-entropy loss</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">loss</span>
+
+<span class="c1"># Function to generate the sequence of words for an epoch</span>
+<span class="k">def</span> <span class="nf">generate_epoch_sequence</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">lexbatch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">no_repeat</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">epoch_sequence</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">lexbatch</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lexbatch</span><span class="p">):</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="n">lexicon</span> <span class="o">*</span> <span class="n">frequency</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">no_repeat</span><span class="p">:</span>
+                <span class="c1"># Ensure no repeated word at the boundary</span>
+                <span class="k">while</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">epoch_sequence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+            <span class="n">epoch_sequence</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">epoch_sequence</span> <span class="o">=</span> <span class="n">lexicon</span> <span class="o">*</span> <span class="n">frequency</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">epoch_sequence</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">no_repeat</span><span class="p">:</span>
+            <span class="c1"># Ensure no repeated word at the start</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">epoch_sequence</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">epoch_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">epoch_sequence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">epoch_sequence</span><span class="p">)</span>
+
+    <span class="c1"># Convert the sequence of words into a sequence of letters</span>
+    <span class="n">letter_sequence</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">epoch_sequence</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">letter_sequence</span>
+
+<span class="c1"># Function to encode words to input and target vectors</span>
+<span class="k">def</span> <span class="nf">encode_word</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">syllable_to_index</span><span class="p">):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">syllable_to_index</span><span class="p">))</span>
+    <span class="n">vec</span><span class="p">[</span><span class="n">syllable_to_index</span><span class="p">[</span><span class="n">word</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># vec[syllable_to_index[word[-1]]] = 1  # Encoding the last syllable as target</span>
+    <span class="k">return</span> <span class="n">vec</span>
+
+<span class="c1"># Function to calculate loss on a given sequence of words</span>
+<span class="k">def</span> <span class="nf">calculate_loss_on_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                               <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">):</span>
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_syllables</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Subtract 1 because the last syllable has no following syllable as a target</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">input_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">sequence</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+        <span class="n">target_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">sequence</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">output_vec</span> <span class="o">=</span> <span class="n">forward_pass</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">)</span>
+        <span class="n">this_loss</span> <span class="o">=</span> <span class="n">cross_entropy_loss</span><span class="p">(</span><span class="n">target_vec</span><span class="p">,</span> <span class="n">output_vec</span><span class="p">)</span>
+        <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">this_loss</span>
+        <span class="c1"># print(f&#39;\n#{sequence}\n\tINPUT {input_vec}\n\tTARGET {target_vec}\n\tOUTPUT {output_vec}\n\tthisLOSS {this_loss}, totLOSS {total_loss}&#39;)</span>
+    
+    <span class="c1"># time.sleep(4)</span>
+    <span class="n">average_loss_per_syllable</span> <span class="o">=</span> <span class="n">total_loss</span> <span class="o">/</span> <span class="n">num_syllables</span>
+    <span class="k">return</span> <span class="n">average_loss_per_syllable</span>
+    <span class="c1"># return total_loss</span>
+
+<span class="c1"># Function to calculate error for individual word for all but last item, since target is not defined</span>
+<span class="k">def</span> <span class="nf">calculate_word_error</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                         <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">):</span>
+    <span class="n">total_error</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">input_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+        <span class="n">target_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">output_vec</span> <span class="o">=</span> <span class="n">forward_pass</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> \
+                                     <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">)</span>
+        <span class="n">total_error</span> <span class="o">+=</span> <span class="n">cross_entropy_loss</span><span class="p">(</span><span class="n">target_vec</span><span class="p">,</span> <span class="n">output_vec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total_error</span>
+
+<span class="c1"># Function to calculate word choices</span>
+<span class="k">def</span> <span class="nf">calculate_word_choices</span><span class="p">(</span><span class="n">lex_errors</span><span class="p">,</span> <span class="n">comp_errors</span><span class="p">):</span>
+    <span class="n">word_better_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_comparisons</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">lex_error</span><span class="p">,</span> <span class="n">comp_error</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lex_errors</span><span class="p">,</span> <span class="n">comp_errors</span><span class="p">):</span>
+        <span class="n">total_comparisons</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">lex_error</span> <span class="o">&lt;</span> <span class="n">comp_error</span><span class="p">:</span>
+            <span class="n">word_better_count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">word_better_count</span> <span class="o">/</span> <span class="n">total_comparisons</span> <span class="k">if</span> <span class="n">total_comparisons</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+
+<span class="c1"># Function to calculate proportion better</span>
+<span class="k">def</span> <span class="nf">prop_better_and_word_choices</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">comparison_items</span><span class="p">,</span> \
+                                <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                                <span class="n">syllable_to_index</span><span class="p">):</span>
+    <span class="c1"># Calculate errors for each word in lexicon and comparison items</span>
+    <span class="n">lex_errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">calculate_word_error</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                                       <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">hidden_state</span><span class="p">))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">lexicon</span><span class="p">]</span>
+    <span class="n">comp_errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">calculate_word_error</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                                        <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">hidden_state</span><span class="p">))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">comparison_items</span><span class="p">]</span>
+
+    <span class="c1"># Word choices calculation</span>
+    <span class="n">wchoices</span> <span class="o">=</span> <span class="n">calculate_word_choices</span><span class="p">(</span><span class="n">lex_errors</span><span class="p">,</span> <span class="n">comp_errors</span><span class="p">)</span>
+    
+    <span class="c1"># Mean errors</span>
+    <span class="n">lexicon_mean_error</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lex_errors</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">lex_errors</span><span class="p">)</span>
+    <span class="n">comparison_mean_error</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">comp_errors</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">comp_errors</span><span class="p">)</span>
+
+    <span class="c1"># Proportion better calculation</span>
+    <span class="n">pbetter</span> <span class="o">=</span> <span class="p">(</span><span class="n">comparison_mean_error</span> <span class="o">-</span> <span class="n">lexicon_mean_error</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">comparison_mean_error</span> <span class="o">+</span> <span class="n">lexicon_mean_error</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">pbetter</span><span class="p">,</span> <span class="n">wchoices</span>
+
+<span class="c1"># The forward pass of the network with context-to-hidden connections</span>
+<span class="k">def</span> <span class="nf">forward_pass</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">):</span>
+    <span class="c1"># new_hidden_state = np.tanh(np.dot(input_vec, W_input_hidden) + np.dot(hidden_state, W_context_hidden))</span>
+    <span class="n">new_hidden_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">)</span> <span class="o">+</span> <span class="n">W_bias_hidden</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">hidden_state</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">))</span>
+    <span class="c1"># new_hidden_state = np.tanh(np.dot(input_vec, W_input_hidden) + W_bias_hidden) #+ np.dot(hidden_state, W_context_hidden))</span>
+    <span class="n">output_vec</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">new_hidden_state</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">))</span>  <span class="c1"># Applying sigmoid activation</span>
+    <span class="k">return</span> <span class="n">new_hidden_state</span><span class="p">,</span> <span class="n">output_vec</span>
+
+
+<span class="c1"># The training function</span>
+<span class="k">def</span> <span class="nf">train_network</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> 
+                  <span class="n">hidden_state</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">print_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                  <span class="n">colorbar_width</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">colorbar_pad</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">nhidden</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">testlexicon</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">testlexicon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">testlexicon</span> <span class="o">=</span> <span class="n">lexicon</span>
+    
+    <span class="n">unique_syllables</span><span class="p">,</span> <span class="n">syllable_to_index</span> <span class="o">=</span> <span class="n">process_lexicon</span><span class="p">(</span><span class="n">lexicon</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">nhidden</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nhidden</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_syllables</span><span class="p">)</span>
+
+    <span class="c1"># initialize history vectors</span>
+    <span class="n">input_history</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># To store input vectors for visualization</span>
+    <span class="n">output_history</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># To store output vectors for visualization</span>
+    <span class="n">hidden_state_history</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># To store hidden state vectors for visualization</span>
+    <span class="n">loss_history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">loss_lexicon_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="n">epochs</span>  <span class="c1"># Initialize with NaNs</span>
+    <span class="n">prop_better_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="n">epochs</span>  <span class="c1"># Initialize with NaNs</span>
+    <span class="n">word_choices_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="n">epochs</span>  <span class="c1"># Initialize with NaNs</span>
+    
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="n">letter_sequence</span> <span class="o">=</span> <span class="n">generate_epoch_sequence</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># epoch_sequence = generate_epoch_sequence(lexicon, 1)  # Frequency set to 1 for simplicity</span>
+        <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Generate input and target sequences</span>
+        <span class="n">input_sequence</span> <span class="o">=</span> <span class="n">letter_sequence</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># All except the last element</span>
+        <span class="n">target_sequence</span> <span class="o">=</span> <span class="n">letter_sequence</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># All except the first element</span>
+        
+        <span class="n">combined_input_target_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">syllable_to_index</span><span class="p">)))</span>
+        <span class="n">combined_input_target_output_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">syllable_to_index</span><span class="p">)))</span>  <span class="c1"># Adding a row for output</span>
+
+        <span class="n">combined_hidden_context_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">nhidden</span><span class="p">))</span>
+        <span class="c1"># break</span>
+        
+        <span class="c1"># Backpropagation (updated for Cross-Entropy Loss)</span>
+        <span class="k">for</span> <span class="n">input_letter</span><span class="p">,</span> <span class="n">target_letter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">input_sequence</span><span class="p">,</span> <span class="n">target_sequence</span><span class="p">):</span>
+            <span class="n">input_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">input_letter</span><span class="p">,</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+            <span class="n">target_vec</span> <span class="o">=</span> <span class="n">encode_word</span><span class="p">(</span><span class="n">target_letter</span><span class="p">,</span> <span class="n">syllable_to_index</span><span class="p">)</span>
+        <span class="c1"># for input_word, target_word in zip(input_sequence, target_sequence):</span>
+        <span class="c1">#     input_vec = encode_word(input_word, syllable_to_index)</span>
+        <span class="c1">#     target_vec = encode_word(target_word, syllable_to_index)</span>
+
+            <span class="n">new_hidden_state</span><span class="p">,</span> <span class="n">output_vec</span> <span class="o">=</span> <span class="n">forward_pass</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">)</span>
+
+            <span class="c1">#nhidden = len(hidden_state)</span>
+
+            
+            <span class="c1"># Calculate loss</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy_loss</span><span class="p">(</span><span class="n">target_vec</span><span class="p">,</span> <span class="n">output_vec</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy_loss</span><span class="p">(</span><span class="n">target_vec</span><span class="p">,</span> <span class="n">output_vec</span><span class="p">)</span>
+            <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">loss</span>
+
+            <span class="c1"># Error signal for output layer</span>
+            <span class="n">error_signal</span> <span class="o">=</span> <span class="n">output_vec</span> <span class="o">-</span> <span class="n">target_vec</span>
+
+            <span class="c1"># Gradient for W_hidden_output</span>
+            <span class="n">dW_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">new_hidden_state</span><span class="p">,</span> <span class="n">error_signal</span><span class="p">)</span>
+
+            <span class="c1"># Error signal for hidden layer (propagating back through the network)</span>
+            <span class="n">hidden_error_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">error_signal</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">new_hidden_state</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Gradient for W_context_hidden</span>
+            <span class="n">dW_context_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">hidden_state</span><span class="p">,</span> <span class="n">hidden_error_signal</span><span class="p">)</span>
+
+            <span class="c1"># Gradient for W_input_hidden</span>
+            <span class="n">dW_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">input_vec</span><span class="p">,</span> <span class="n">hidden_error_signal</span><span class="p">)</span>
+
+            <span class="c1"># Gradient for W_bias_hidden</span>
+            <span class="n">dW_bias_hidden</span> <span class="o">=</span> <span class="n">hidden_error_signal</span>
+
+            <span class="c1"># Update weights</span>
+            <span class="n">W_input_hidden</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dW_input_hidden</span>
+            <span class="n">W_context_hidden</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dW_context_hidden</span>
+            <span class="n">W_hidden_output</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dW_hidden_output</span>
+            <span class="n">W_bias_hidden</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dW_bias_hidden</span>
+
+
+            <span class="n">context_state</span> <span class="o">=</span> <span class="n">hidden_state</span>
+            <span class="n">hidden_state</span> <span class="o">=</span> <span class="n">new_hidden_state</span>
+            <span class="n">hidden_state_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hidden_state</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>  <span class="c1"># Store the hidden state</span>
+            
+            <span class="n">combined_input_target_output_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">input_vec</span>
+            <span class="n">combined_input_target_output_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">target_vec</span>
+            <span class="n">combined_input_target_output_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">output_vec</span>  <span class="c1"># Add output vector to the matrix</span>
+
+            <span class="n">combined_hidden_context_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">hidden_state</span>
+            <span class="n">combined_hidden_context_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">context_state</span>
+
+
+        <span class="c1"># At the end of each epoch, append the average loss to loss_history</span>
+        <span class="n">average_loss</span> <span class="o">=</span> <span class="n">total_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_sequence</span><span class="p">)</span>
+        <span class="n">loss_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">average_loss</span><span class="p">)</span>
+
+
+        <span class="c1"># # print(f&quot;Epoch {epoch+1}, Total loss: {total_loss}&quot;</span>
+        <span class="c1"># loss_history.append(total_loss / len(input_sequence))</span>
+
+        <span class="n">input_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_vec</span><span class="p">)</span>
+        <span class="n">output_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_vec</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">test_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Test (1): Loss on the Lexicon</span>
+            <span class="n">loss_lexicon</span> <span class="o">=</span> <span class="n">calculate_loss_on_sequence</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">testlexicon</span><span class="p">),</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">)</span>
+            <span class="n">loss_lexicon_history</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_lexicon</span>
+            <span class="n">shifted_lexicon</span> <span class="o">=</span> <span class="n">testlexicon</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">testlexicon</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Shift the lexicon order</span>
+            <span class="n">loss_shifted</span> <span class="o">=</span> <span class="n">calculate_loss_on_sequence</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shifted_lexicon</span><span class="p">),</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">syllable_to_index</span><span class="p">,</span> <span class="n">hidden_state</span><span class="p">)</span>
+
+            <span class="c1"># Test (2): Proportion Better &amp; word choices</span>
+            <span class="n">proportion_better</span><span class="p">,</span> <span class="n">word_choices</span> <span class="o">=</span> <span class="n">prop_better_and_word_choices</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">comparison_items</span><span class="p">,</span> \
+                                                                           <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> \
+                                                                           <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                                                                           <span class="n">syllable_to_index</span><span class="p">)</span>
+            <span class="n">prop_better_history</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="n">proportion_better</span>
+            <span class="n">word_choices_history</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_choices</span>
+
+            <span class="c1"># print(f&quot;\nEpoch {epoch}: Loss Lexicon {loss_lexicon:.4f}, Loss Shifted {loss_shifted:.4f}, Proportion Better {proportion_better:.4f}, Word Choices {word_choices:.4f}&quot;)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">: Test loss </span><span class="si">{</span><span class="n">loss_lexicon</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Proportion Better </span><span class="si">{</span><span class="n">proportion_better</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Word Choices </span><span class="si">{</span><span class="n">word_choices</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># if epoch &gt; 4950:</span>
+            <span class="c1">#     time.sleep(1)</span>
+
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">print_interval</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">epoch</span> <span class="o">==</span> <span class="n">epochs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">plot_training_progress</span><span class="p">(</span><span class="n">loss_history</span><span class="p">,</span> <span class="n">word_choices_history</span><span class="p">,</span> <span class="n">prop_better_history</span><span class="p">,</span> <span class="n">combined_input_target_output_matrix</span><span class="p">,</span> <span class="n">combined_hidden_context_matrix</span><span class="p">,</span> 
+                                   <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">loss_lexicon_history</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">Input: </span><span class="si">{</span><span class="n">input_sequence</span><span class="si">}</span><span class="se">\t</span><span class="s1">Target: </span><span class="si">{</span><span class="n">target_sequence</span><span class="si">}</span><span class="s1">        &#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            
+
+        <span class="n">hidden_state_history</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Reset hidden state history for next interval</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">: Test loss </span><span class="si">{</span><span class="n">loss_lexicon</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Proportion Better </span><span class="si">{</span><span class="n">proportion_better</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Word Choices </span><span class="si">{</span><span class="n">word_choices</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># print(f&quot;\nEpoch {epoch}: Loss Lexicon {loss_lexicon:.4f}, Loss Shifted {loss_shifted:.4f}, Proportion Better {proportion_better:.4f}, Word Choices {word_choices:.4f}&quot;)</span>
+        
+    <span class="k">return</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-the-code">
+<h2>Using the code<a class="headerlink" href="#using-the-code" title="Link to this heading">#</a></h2>
+<p>The cell below uses the functions we’ve defined above to train a network. You’ll get plots of loss (error), ‘test metrics’ (proportion better and word choices), heat maps of weights. There are also heat maps showing inputs (what syllable is current input), targets (what is the desired target), and outputs (activations over output nodes). You’ll see that the output node corresponding to the target gets lighter (moves towards white) as training progresses, indicating it can actually predict the upcoming targets fairly well.</p>
+<p>Keep in mind that the network could potentially get perfect at predicting syllables within words (transitional probabilities are 1.0 within words) but not between words (where transitional probabilities are 0.333 since there are 3 possible next syllables when we get to the end of one word).</p>
+<p>Run this cell to train the network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="c1"># Here are 4 &#39;words&#39; akin to the items used by Saffran et al. (1996)</span>
+<span class="n">lexicon</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ABC&#39;</span><span class="p">,</span> <span class="s1">&#39;DEF&#39;</span><span class="p">,</span> <span class="s1">&#39;GHI&#39;</span><span class="p">,</span> <span class="s1">&#39;JKL&#39;</span><span class="p">]</span>
+<span class="c1"># testlexicon = [&#39;ABC&#39;, &#39;DEF&#39;] # Saffran et al only used the first 2 words</span>
+<span class="n">testlexicon</span><span class="o">=</span><span class="kc">None</span>
+
+<span class="c1"># Here are 4 &#39;part-words&#39; made up of the last syllable of 1 word and the first 2 syllables of another</span>
+<span class="n">comparison_items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CDE&#39;</span><span class="p">,</span> <span class="s1">&#39;FGH&#39;</span><span class="p">,</span> <span class="s1">&#39;IJK&#39;</span><span class="p">,</span> <span class="s1">&#39;LAB&#39;</span><span class="p">]</span>  <span class="c1"># Example</span>
+<span class="c1"># comparison_items = [&#39;IJK&#39;, &#39;AGH&#39;]  # Modeled directly after the items used by Saffran et al</span>
+<span class="c1"># if nhid is set to None, the actual number will be the same as number of unique syllables in lexicon,</span>
+<span class="c1"># which is the approach of French et al. 2011</span>
+<span class="c1">#nhid = 2</span>
+<span class="n">nhid</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="c1">#nhid = 20</span>
+<span class="c1"># nhid = 12</span>
+<span class="c1"># nhid = None </span>
+<span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span> <span class="o">=</span> <span class="n">initialize_network</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> \
+                                                                                                    <span class="n">nhidden</span><span class="o">=</span><span class="n">nhid</span><span class="p">)</span>
+<span class="n">nepochs</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> <span class="n">hidden_state</span> <span class="o">=</span> \
+    <span class="n">train_network</span><span class="p">(</span><span class="n">lexicon</span><span class="p">,</span> <span class="n">nepochs</span><span class="p">,</span> <span class="n">W_input_hidden</span><span class="p">,</span> <span class="n">W_bias_hidden</span><span class="p">,</span> <span class="n">W_context_hidden</span><span class="p">,</span> <span class="n">W_hidden_output</span><span class="p">,</span> \
+                  <span class="n">hidden_state</span><span class="p">,</span> <span class="n">print_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nhidden</span><span class="o">=</span><span class="n">nhid</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">test_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> \
+                  <span class="n">testlexicon</span><span class="o">=</span><span class="n">testlexicon</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1b7b8cc67eb13bac599cd4119b97815e187a7d342dc12e09561ddc798e47a484.png" src="_images/1b7b8cc67eb13bac599cd4119b97815e187a7d342dc12e09561ddc798e47a484.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Input: GHIDEFJKLAB	Target: HIDEFJKLABC        
+Epoch 1999: Test loss 1.6095, Proportion Better 0.1011, Word Choices 0.7500
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="ideas-for-exploration">
+<h2><font color='red'>Ideas for exploration</font><a class="headerlink" href="#ideas-for-exploration" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Try changing the number of hidden nodes. Comment out the line <code class="docutils literal notranslate"><span class="pre">nhid</span> <span class="pre">=</span> <span class="pre">None</span></code> (when <code class="docutils literal notranslate"><span class="pre">nhid</span></code> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the number of hidden units is set to the number of input units) and uncomment one of the other ones. Try setting <code class="docutils literal notranslate"><span class="pre">nhid</span></code> to 2. Increase <code class="docutils literal notranslate"><span class="pre">nepochs</span></code> to see if the network can learn. (Hint: it’s unlikely to get good at this task with 2 hidden nodes.) What’s the smallest number of hidden nodes you can specify and have the system learn in reasonable time? What happens if you specify a lot of nodes (30 or 300)? Note that it may also be helpful to increase or decrease the learning rate.</p></li>
+<li><p>Try eliminating the bias nodes (simplest way: set them to zero initially and comment out the steps that update the bias-to-hidden weights). Does this change things? Does it change how few hidden nodes you can use?</p></li>
+<li><p>Remove the context nodes (simplest way: intialize the weights to zero and comment out the steps that update context-to-hidden weights). This will make this a feedforward network without memory. Can it still learn this task?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="how-we-could-move-something-like-this-to-publication">
+<h2>How we could move something like this to publication<a class="headerlink" href="#how-we-could-move-something-like-this-to-publication" title="Link to this heading">#</a></h2>
+<p>As we’ll discuss in class, SRNs were largely dismissed as a good model for human statistical learning due to some famous apparent failures reported ~15 years ago. This means a useful paper would be one that would do a few things.</p>
+<ol class="arabic simple">
+<li><p>Train many instances of each model and average results to make sure we are not focused on flukes. In a paper I’m working on, I repeat each simulation 100 times.</p></li>
+<li><p>Apply SRNs to classic cases like Saffran et al. (1996) but also the cases where people reported they fail. I’ve done this, and with some corrections to poor procedures in previous work, SRNs work great.</p></li>
+<li><p>Try to identify which statistical learning tasks really require long-distance dependencies (i.e., more than predicting the next syllable directly from the current one). I found that the early, classic studies (Saffran et al., 1996; Aslin et al., 1998) can be learned by feedforward networks that can only learn adjacent syllable transitional probabilities, but many others require the memory provided by an SRN. My challenge now is figuring out what the actual statistical information acquired by the SRN is in those cases. If this is a challenge you would be interested in learning more about or even working on, let me know!</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="ambitious-challenge-questions">
+<h2><font color='red'>Ambitious challenge questions</font><a class="headerlink" href="#ambitious-challenge-questions" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>What computational capacities are needed to simulate the Saffran et al. paradigm? Could we simulate this with a feedforward network? Try copying the SRN code to a new notebook and remove the context nodes and connections. This would make it a feedforward network. How could you train it to simulate the task? What if the feedforward network can learn this task – what would the implications be?</p></li>
+<li><p>Aslin, Saffran, &amp; Newport (1998) observed that there was a ‘confound’ in the Saffran et al. (1996) paradigm: words occurred more frequently than part words, so perhaps infants were sensitive to the ‘surface frequency’ of syllable sequences rather than transitional probabilities. To control for this, they made 2 of the words ‘high frequency’ by having them occur twice as often as the other two words. Then they were able to select high-frequency partwords (the end of one high-frequency word and the first 2 syllables of another) that were matched in surface frequency with the low-frequency words. Infants preferred low-frequency words to frequency-matched partwords, suggesting they were attuning to transitional probabilities. Would you predict that an SRN would show lower error on low-frequency words than frequency-matched partwords? Can you implement this and test the SRN?</p></li>
+<li><p>French et al. (2011) created a clever ‘box language’ where TPs were always 0.5. The language is depicted in this figure from their paper. a1 is always followed by either a2 or a3. a2 is always followed by b1 or c1, etc. So the ‘forward’ TPs are always 0.5. But the ‘backward’ TPs are high (1.0) within words (a2 is <strong>always</strong> preceded by a1) but low between words (a1 can be preceded by b2, b3, c2 or c3, so the backward TP is 0.25). This also means that words have higher frequency than partwords (every time a2 occurs, a1-a2 has occurred, while half the time a2-b1 will occur and half the time a2-c1 will occur, so words occur twice as often as partwords). Infants preferred partwords (e.g., a2-b1) to words (a1-a2) (that is, they showed a <em>novelty preference</em> as did infants in Saffran et al., 1996). Would you predict an SRN would show lower error on words than partwords? Could you implement this and test the SRN? (Suggestion: rather than a1, a2, etc., perhaps have an A box, M box, and X box; possible words could be AB, AC, MN, MO, XY, XZ. This would allow you to use the same code we have been using, which assumes each syllable is represented by one letter.)</p></li>
+</ol>
+<div>
+<img src="figs/french-etal-2011-fig6-box-language.png" width="500"/>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="13_nnets-03-learning-xor.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Neural networks, Part 3 – training networks for non-linearly separable mappings</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#human-statistical-learning-a-publication-level-example"><em>Human Statistical Learning: a publication-level example</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#note-statistical-learning-means-different-things-in-different-fields">Note: ‘statistical learning’ means different things in different fields</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-statistical-learning">Simulating statistical learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feedforward-network">Feedforward network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-it-a-simple-recurrent-network-srn">Making it a Simple Recurrent Network (SRN)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-assessing-learning">A note: Assessing learning</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-details-about-the-srn-architecture">Some details about the SRN architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#skip-this-section-if-you-are-not-interested-in-this-level-of-detail"><em>Skip this section if you are not interested in this level of detail.</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-error-signal-in-the-context-of-sigmoid-activation-and-cross-entropy-loss">Understanding error signal in the context of sigmoid activation and <em>Cross-Entropy Loss</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-entropy-loss-for-multi-class-classification">Cross-Entropy Loss for <em>Multi-Class</em> Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sigmoid-activation-function">Sigmoid Activation Function:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Cross-Entropy Loss for Multi-Class Classification:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#derivative-of-cross-entropy-loss">Derivative of Cross-Entropy Loss:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-class-setting">Multi-Class Setting:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sigmoid-activation">Sigmoid Activation:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-entropy-loss-for-multi-class-one-hot-targets">Cross-Entropy Loss for Multi-Class (One-Hot Targets):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#error-signal">Error Signal:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-up-the-srn">Coding up the SRN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-needed-libraries">Import needed libraries</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-routines">Plotting routines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-functions">Network functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-code">Using the code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ideas-for-exploration"><font color="red">Ideas for exploration</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-we-could-move-something-like-this-to-publication">How we could move something like this to publication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ambitious-challenge-questions"><font color="red">Ambitious challenge questions</font></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By James Magnuson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
