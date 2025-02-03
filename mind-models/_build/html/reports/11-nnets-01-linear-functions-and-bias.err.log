@@ -1,0 +1,100 @@
+Traceback (most recent call last):
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_cache\executors\utils.py", line 58, in single_nb_execution
+    executenb(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_core\utils\__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\asyncio\base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import network_plotter as netplot
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+plot_width=10.0
+plot_height = plot_width
+fig_width=plot_width*1.2
+fig_height = fig_width
+figsize = (fig_width, fig_height) 
+
+# Node / layers definition
+layers = [
+    ['Input 1', 'Input 2', 'Input 3'],
+    ['Hid 1', 'Hid 2', 'Hid 3', 'Hid 4'],
+    ['Output']
+]
+
+# Generate random weights based on the size of layers
+#np.random.seed(0)  # For reproducibility
+input_to_hidden_weights = np.random.rand(len(layers[0]), len(layers[1]))  # Weights from inputs to hidden nodes
+hidden_to_output_weights = np.random.rand(len(layers[1]))  # Weights from hidden nodes to the output node
+
+
+# Creating the figure with specified size
+fig, ax = plt.subplots(figsize=figsize)
+ax.set_xlim(0, fig_width) 
+ax.set_ylim(0, fig_height) 
+ax.set_aspect('equal', adjustable='box')  # Adjust aspect ratio to fit the plot_width
+
+# Calculate node positions with the specified plot width
+node_positions = netplot.calculate_node_positions(layers, plot_width, fig_width, fig_height) # , offset=0.3)
+
+# Draw Neurons with Labels
+num_layers = len(layers)
+subtext=''
+nodetext=''
+for i, column in enumerate(layers):
+    for node in column:
+        pos = node_positions[node]
+        if i == num_layers - 1:
+            subtext='Decision'
+            nodetext = '1.0'
+        netplot.draw_neuron_with_label(ax, pos, node, i, num_layers, plot_width=plot_width, subtext=subtext, nodetext=nodetext)
+
+# Draw Connections with Weights
+for i, input_node in enumerate(layers[0]):
+    for j, hidden_node in enumerate(layers[1]):
+        weight = input_to_hidden_weights[i, j]
+        netplot.draw_connection_with_weight(ax, node_positions, input_node, hidden_node, weight, show_weight=True, plot_width=plot_width)
+
+# Draw connections from hidden nodes to the decision node
+for j, hidden_node in enumerate(layers[1]):
+    bow=False
+    weight = hidden_to_output_weights[j]
+    # uncomment next line to make one connection bowed
+    #bow = hidden_node == 'Hid 4'  # Only bow the connection for Hidden4
+    netplot.draw_connection_with_weight(ax, node_positions, hidden_node, 'Output', weight, show_weight=True, bow=bow, plot_width=plot_width)
+  
+netplot.draw_connection_with_weight(ax, node_positions, 'Output', 'Hid 4', 0.44, show_weight=True, bow=True, plot_width=plot_width) # , edge_color='pink')
+netplot.draw_connection_with_weight(ax, node_positions, 'Output', 'Hid 1', 0.11, show_weight=True, bow=True, plot_width=plot_width) # , edge_color='pink')
+netplot.draw_connection_with_weight(ax, node_positions, 'Hid 1', 'Input 1', 0.01, show_weight=True, bow=True, plot_width=plot_width) # , edge_color='pink')
+
+
+plt.axis('off')
+plt.show()
+#print(input_to_hidden_weights)
+#print(hidden_to_output_weights)
+------------------
+
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [1;32mIn[2], line 1[0m
+[1;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mnetwork_plotter[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnetplot[39;00m
+[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
+[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m [38;5;28;01mas[39;00m [38;5;21;01mplt[39;00m
+
+[1;31mModuleNotFoundError[0m: No module named 'network_plotter'
+

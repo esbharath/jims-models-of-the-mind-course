@@ -1,0 +1,1800 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Neural networks, Part 2 – training networks &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '12_nnets-02-training-linear-networks';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Neural networks, Part 3 – training networks for non-linearly separable mappings" href="13_nnets-03-learning-xor.html" />
+    <link rel="prev" title="Neural networks, Part 1: Linear logic functions as networks" href="11_nnets-01-linear-functions-and-bias.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="My sample book - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    models-of-the-mind-notebooks
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_python-jupyter-overview.html">Models of the Mind, 2024</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="01_game-of-life.html">Conway’s “Game of Life”</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="02a_math-probability-matching.html"><font color="red">LAB REPORT</font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="02b_math-probability-matching.html">PROBABILITY MATCHING, PART 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_agent-probability-matching.html">PROBABILITY MATCHING, PART 3</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="04_probability-review.html">Preliminaries: Understanding Logical Symbols in Probability</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="05_bayes-theorem-rev.html">Introduction to Bayes’ theorem</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_pseudo-swr-analysis.html">More on mathematical models: Statistical models</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="07_swr-bayes-004.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="08_trace-swr.html">Implementations of the TRACE model</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="10_netsci-01.html">Network Science Overview</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="11_nnets-01-linear-functions-and-bias.html">Neural networks, Part 1: Linear logic functions as networks</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Neural networks, Part 2 – training networks</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="13_nnets-03-learning-xor.html">Neural networks, Part 3 – training networks for non-linearly separable mappings</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="14_nnets-04-srn-statlearn.html">Neural networks, Part 4</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F12_nnets-02-training-linear-networks.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/12_nnets-02-training-linear-networks.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Neural networks, Part 2 – training networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Neural networks, Part 2 – training networks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networks-that-learn">Networks that learn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perceptron-learning-rule">Perceptron Learning Rule</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearly-separable-mapping">Linearly Separable Mapping</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characteristics">Characteristics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#importance-in-machine-learning">Importance in Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-and">Learning AND</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-network">Plot the network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-1"><font color="red">Lab question 1</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-an-or-network">Training an OR network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-repeat-our-training-to-see-how-consistent-the-results-are">Let’s repeat our training to see how consistent the results are</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-2"><font color="red">Lab question 2</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-nand-network">Training a NAND network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-3"><font color="red">Lab question 3</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-an-xor-network">Training an XOR network…?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#towards-solving-xor">Towards solving XOR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-do">What to do?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#truth-table-for-xor">Truth table for XOR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-it-modular">Make it modular</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-the-network">Evaluating the network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-4"><font color="red">Lab question 4</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-5-challenge-questions"><font color="red">Lab question 5: Challenge questions</font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#we-are-going-to-need-another-approach-to-train-a-network-to-do-xor-that-s-what-we-will-do-in-the-next-notebook-nnets-03">We are going to need another approach to train a network to do XOR. That’s what we will do in the next notebook (nnets-03).</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="alert alert-block alert-info">
+This tutorial includes 5 lab questions. The questions have headers like <font color='red'><b>Lab question 1</b></font> in red font. Everyone please do the first four. Everyone is welcome to try #5, but it is required for grad students and honors students.  Submit your answers via WebCT and remember to paste in the question text (that really helps me grade faster!).  
+</div><section class="tex2jax_ignore mathjax_ignore" id="neural-networks-part-2-training-networks">
+<h1>Neural networks, Part 2 – training networks<a class="headerlink" href="#neural-networks-part-2-training-networks" title="Link to this heading">#</a></h1>
+<hr class="docutils" />
+<section id="networks-that-learn">
+<h2>Networks that learn<a class="headerlink" href="#networks-that-learn" title="Link to this heading">#</a></h2>
+<p>Now let’s look at ways that we can train networks for the functions OR, AND, and NAND.</p>
+<p>Our starting point is the <strong>Perceptron</strong> model from the 1950s. It was developed by psychologist Frank Rosenblatt. It was originally an actual electronic device made to try to simulate the operation of biological neurons. He developed a learning rule for the device that allowed it to learn by trial and error.</p>
+</section>
+<hr class="docutils" />
+<section id="perceptron-learning-rule">
+<h2>Perceptron Learning Rule<a class="headerlink" href="#perceptron-learning-rule" title="Link to this heading">#</a></h2>
+<p>The perceptron learning rule is a foundational algorithm in machine learning (Rosenblatt, 1958). It is used for training single-layer perceptrons, a basic type of artificial neuron, and forms the basis for more complex neural networks.</p>
+<section id="key-features">
+<h3>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Binary Classification</strong>: Designed for binary classification tasks, where it predicts one of two classes.</p></li>
+<li><p><strong>Linear Decision Boundary</strong>: It computes a linear decision boundary based on the weighted sum of inputs.</p></li>
+<li><p><strong>Weights Adjustment</strong>: Adjusts weights based on classification accuracy. Increases weights for correct predictions and decreases for errors.</p></li>
+<li><p><strong>Algorithm</strong>:</p>
+<ul class="simple">
+<li><p>Initialize weights and threshold.</p></li>
+<li><p>For each training sample:</p>
+<ul>
+<li><p>Compute output based on current weights.</p></li>
+<li><p>If the output is incorrect, update weights:
+$<span class="math notranslate nohighlight">\( w_i \leftarrow w_i + \eta(y - \hat{y})x_i \)</span><span class="math notranslate nohighlight">\(  
+where \)</span> w_i <span class="math notranslate nohighlight">\( is the weight, \)</span> \eta <span class="math notranslate nohighlight">\( ('eta') is the learning rate, \)</span> y <span class="math notranslate nohighlight">\( the actual label, \)</span> \hat{y} <span class="math notranslate nohighlight">\( ('y hat') is the predicted label, and \)</span> x_i $ is the input feature.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Convergence</strong>: If the input-output mapping is linearly separable, the perceptron is guaranteed to converge to a solution.</p></li>
+<li><p><strong>Limitations</strong>: Single-layer perceptrions (i.e., networks with only one set of weights) can only model linearly separable functions and will fail to converge for non-linearly separable mappings (Minsky &amp; Pappert, 1969; Bishop, 2006).</p></li>
+</ol>
+<div class="alert alert-block alert-info">
+</section>
+</section>
+<section id="linearly-separable-mapping">
+<h2>Linearly Separable Mapping<a class="headerlink" href="#linearly-separable-mapping" title="Link to this heading">#</a></h2>
+<p>A linearly separable mapping refers to a scenario where a set of data points belonging to two classes can be completely separated by a linear boundary. If the input patterns have just 2 dimensions (i.e., there are 2 inputs), the mapping is linearly separable if you can plot the inputs in 2d and draw a single straight line that separates the inputs into the output categories. If you have more than 3 dimensions, the same thing applies, but now we talk about separating the output categories with a hyperplane (e.g., for 3 dimensions, we would make a 3d plot, and then the question is whether a single plane [imagine a sheet of perfectly stiff paper] in some 3d rotation could separate the output categories). This concept is fundamental in machine learning and pattern recognition.</p>
+<section id="characteristics">
+<h3>Characteristics<a class="headerlink" href="#characteristics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Two Classes</strong>: Involves data points that are categorized into two distinct classes. (Conceptually, this can be extended to more classes where linearly separable could mean that you can segregate your <span class="math notranslate nohighlight">\(n\)</span> classes with <span class="math notranslate nohighlight">\(n-1\)</span> straight lines or hyperplanes [where one line segregates class 1 from all other classes, a second line segregates class 2 from classes 3 to <span class="math notranslate nohighlight">\(n\)</span>, and so on, until line <span class="math notranslate nohighlight">\(n-1\)</span> separates class <span class="math notranslate nohighlight">\(n-1\)</span> from class <span class="math notranslate nohighlight">\(n\)</span>], but we will focus on two classes here.)</p></li>
+<li><p><strong>Separation by a Line (or Hyperplane)</strong>: There exists a line (in two dimensions) or a hyperplane (in higher dimensions) that can separate the data points into their respective classes without any overlap.</p></li>
+<li><p><strong>Examples</strong>:</p>
+<ul>
+<li><p>In two dimensions, consider a set of points on a plane belonging to either Class A or Class B. These points are linearly separable if a straight line can be drawn to separate all points of Class A from those of Class B.</p></li>
+<li><p>In higher dimensions, the concept extends to hyperplanes.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="importance-in-machine-learning">
+<h3>Importance in Machine Learning<a class="headerlink" href="#importance-in-machine-learning" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Model Selection</strong>: Linearly separable data can often be effectively modeled with simple linear classifiers, such as the perceptron.</p></li>
+<li><p><strong>Limitations</strong>: Some seemingly simple datasets (input-output mappings) cannot be separated linearly (including XOR, as we will see soon); thus, we need more sophisticated models like multi-layer neural networks.</p></li>
+</ul>
+<p>Linear separability is a key concept in understanding the capabilities and limitations of different classifiers and in choosing the appropriate machine learning model (or neural network architecture) for a given dataset.</p>
+</div>
+<section id="references">
+<h4>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Rosenblatt, F. (1958). <em>The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain</em>. Psychological Review, 65(6), 386–408.</p></li>
+<li><p>Minsky, M. L., &amp; Papert, S. A. (1969). <em>Perceptrons: An Introduction to Computational Geometry</em>. The MIT Press.</p></li>
+<li><p>Bishop, C. M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer.</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="learning-and">
+<h1>Learning AND<a class="headerlink" href="#learning-and" title="Link to this heading">#</a></h1>
+<p>We can implement training for a simple perceptron for the AND problem as follows. We are also going to do something slightly fancy and print total error after each step in a dynamically updating plot. It also adjusts the x-range based on the value of <code class="docutils literal notranslate"><span class="pre">try_updates</span></code> – every time it reaches a multiple of that value, it extends the x-axis by that value (as it turns out, this is unnecessary; matplotlib does a great job just gradually extending plots, as we will see later, but I have not had time to revise this). It stops if it reaches <code class="docutils literal notranslate"><span class="pre">max_updates</span></code> without converging (that is, without finding weights that allow it to solve the task).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MaxNLocator</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+
+<span class="k">def</span> <span class="nf">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">expected_outputs</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">nsd</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> 
+                     <span class="n">max_updates</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">psize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sleeptime</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="mi">37</span><span class="p">,</span> <span class="n">ptitle</span><span class="o">=</span><span class="s1">&#39;Perceptron training progress&#39;</span><span class="p">,</span> 
+                    <span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Trains a perceptron model and plots the training progress along with a heatmap of inputs and outputs.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    inputs (np.array): Input data (features with bias included).</span>
+<span class="sd">    expected_outputs (np.array): Expected output labels.</span>
+<span class="sd">    learning_rate (float): Learning rate for weight updates.</span>
+<span class="sd">    sd (float): Standard deviation for random weight initialization.</span>
+<span class="sd">    max_updates (int): Maximum number of updates/iterations for training.</span>
+<span class="sd">    sleeptime (float): Time in seconds to pause after each update for dynamic plotting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set random seed for reproducibility, only if rseed is not None</span>
+    <span class="k">if</span> <span class="n">rseed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">rseed</span><span class="p">)</span>
+
+    <span class="c1"># Initialize weights</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sd</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># To store total error after each update</span>
+    <span class="n">total_errors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_updates</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Training loop</span>
+    <span class="k">while</span> <span class="n">total_updates</span> <span class="o">&lt;</span> <span class="n">max_updates</span><span class="p">:</span>
+        <span class="n">no_error</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">try_updates</span><span class="p">):</span>
+            <span class="c1"># Add noise to inputs</span>
+            <span class="n">noisy_inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nsd</span><span class="p">,</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+            <span class="n">total_error</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">noisy_inputs</span><span class="p">,</span> <span class="n">expected_outputs</span><span class="p">):</span>
+                <span class="n">predicted</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">weights</span> <span class="o">+=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span> <span class="o">*</span> <span class="nb">input</span>
+                <span class="n">total_error</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span>
+            <span class="n">total_updates</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">total_error</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="nb">input</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">expected_outputs</span><span class="p">):</span>
+                <span class="n">predicted</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">total_error</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">expected</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span>
+            <span class="n">total_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total_error</span><span class="p">)</span>
+
+            <span class="c1"># Dynamic plotting</span>
+            <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+            <span class="c1"># Plot for training progress</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">ptitle</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pstyle</span> <span class="o">==</span> <span class="s1">&#39;line&#39;</span><span class="p">:</span>
+                <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">total_updates</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_errors</span><span class="p">),</span> <span class="n">total_updates</span><span class="p">),</span> <span class="n">total_errors</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total Error over Updates&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">total_updates</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_errors</span><span class="p">),</span> <span class="n">total_updates</span><span class="p">),</span> 
+                              <span class="n">total_errors</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total Error over Updates&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">psize</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Updates&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Total Error&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="p">((</span><span class="n">total_updates</span> <span class="o">//</span> <span class="n">try_updates</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">try_updates</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">total_errors</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Heatmap for inputs and outputs</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="mf">1.1</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="mf">1.1</span>
+            <span class="n">observed_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">])</span>
+            <span class="n">cmap_light</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">([</span><span class="s1">&#39;#FFAAAA&#39;</span><span class="p">,</span> <span class="s1">&#39;#AAAAFF&#39;</span><span class="p">])</span>
+            <span class="n">cmap_bold</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">([</span><span class="s1">&#39;#FF0000&#39;</span><span class="p">,</span> <span class="s1">&#39;#0000FF&#39;</span><span class="p">])</span>
+            <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">())])</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap_light</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">inputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">expected_outputs</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap_bold</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Input 1&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Input 2&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Decision boundary&#39;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleeptime</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">total_error</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converged after </span><span class="si">{</span><span class="n">total_updates</span><span class="si">}</span><span class="s2"> updates&quot;</span><span class="p">)</span>
+                <span class="n">no_error</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">no_error</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">no_error</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">total_updates</span> <span class="o">&gt;=</span> <span class="n">max_updates</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Did not converge after </span><span class="si">{</span><span class="n">total_updates</span><span class="si">}</span><span class="s2"> updates (max set to </span><span class="si">{</span><span class="n">max_updates</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+                        
+    <span class="c1"># Test the trained perceptron</span>
+    <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+        <span class="n">predicted</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="nb">input</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">, Output: </span><span class="si">{</span><span class="n">predicted</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Final weights</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final weights:&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">weights</span>           
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">or_expected_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># AND outputs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">or_expected_outputs</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> 
+                           <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/61663b0e7742acc3c397b01462903a0b5e0012b004051cc913cf90f6914c0992.png" src="_images/61663b0e7742acc3c397b01462903a0b5e0012b004051cc913cf90f6914c0992.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 53 updates
+Input: [0 0], Output: 0
+Input: [0 1], Output: 0
+Input: [1 0], Output: 0
+Input: [1 1], Output: 1
+Final weights: [ 0.43027297  0.07542238 -0.47306063]
+</pre></div>
+</div>
+</div>
+</div>
+<p><em>Note that the blue region is where the network outputs 1, and the red region is where it outputs 0.</em></p>
+<section id="plot-the-network">
+<h2>Plot the network<a class="headerlink" href="#plot-the-network" title="Link to this heading">#</a></h2>
+<p>Now let’s plot the network with code from our previous notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">network_plotter</span> <span class="k">as</span> <span class="nn">netplot</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Setup for the AND network plot</span>
+<span class="n">plot_width</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">plot_height</span> <span class="o">=</span> <span class="n">plot_width</span>
+<span class="n">fig_width</span> <span class="o">=</span> <span class="n">plot_width</span> <span class="o">*</span> <span class="mf">1.2</span>
+<span class="n">fig_height</span> <span class="o">=</span> <span class="n">fig_width</span>
+<span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">fig_width</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+
+<span class="c1"># Define the network for the AND function</span>
+<span class="n">layers_and</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Input 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Input 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Output&#39;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="c1"># Set weights for the AND function</span>
+<span class="c1"># Both inputs need to be 1 to exceed the threshold of 1.5</span>
+<span class="c1">#input_to_output_weights_and = np.array([1.0, 1.0, -1.5])</span>
+
+<span class="c1"># Instead of setting the weights, we will use the ones we just got from training. </span>
+<span class="n">input_to_output_weights_and</span> <span class="o">=</span> <span class="n">or_wts</span>
+
+
+<span class="c1"># Creating the figure for the AND network</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fig_width</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+
+<span class="c1"># Calculate node positions for the AND network</span>
+<span class="n">node_positions_and</span> <span class="o">=</span> <span class="n">netplot</span><span class="o">.</span><span class="n">calculate_node_positions</span><span class="p">(</span><span class="n">layers_and</span><span class="p">,</span> <span class="n">plot_width</span><span class="p">,</span> <span class="n">fig_width</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+
+<span class="c1"># Draw Neurons with Labels for the AND network</span>
+<span class="n">num_layers_and</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers_and</span><span class="p">)</span>
+<span class="n">subtext_and</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">nodetext_and</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_and</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">column</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">node_positions_and</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+        <span class="c1"># if i == num_layers_and - 1:</span>
+        <span class="c1">#     subtext_and = &#39;Threshold: 1.5&#39;</span>
+        <span class="n">netplot</span><span class="o">.</span><span class="n">draw_neuron_with_label</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_layers_and</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">,</span> <span class="n">subtext</span><span class="o">=</span><span class="n">subtext_and</span><span class="p">,</span> <span class="n">nodetext</span><span class="o">=</span><span class="n">nodetext_and</span><span class="p">)</span>
+
+<span class="c1"># Draw Connections with Weights for the AND network</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">input_node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_and</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">input_to_output_weights_and</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">netplot</span><span class="o">.</span><span class="n">draw_connection_with_weight</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">node_positions_and</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="s1">&#39;Output&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">show_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;AND network with bias node and trained weights&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f3dc66b8b66b9660b3bc37b53405f3f752824e48f8316a1638180fa37bcc6e08.png" src="_images/f3dc66b8b66b9660b3bc37b53405f3f752824e48f8316a1638180fa37bcc6e08.png" />
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lab-question-1">
+<h2><font color='red'>Lab question 1</font><a class="headerlink" href="#lab-question-1" title="Link to this heading">#</a></h2>
+<p><em>Answer these as 1.1 and 1.2</em></p>
+<ol class="arabic simple">
+<li><p>What weights did you get for the trained network? Compare them to the weights we used in the previous notebook when we set weights for Inputs to Output and Bias to Output. Explain why these learned weights work, and how they relate to our hand-set weights.</p></li>
+<li><p>Describe the decision boundary.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="training-an-or-network">
+<h2>Training an OR network<a class="headerlink" href="#training-an-or-network" title="Link to this heading">#</a></h2>
+<p>Now let’s see if we can train an OR network. This one seems to suddenly jump to a solution often. Why do you think that is?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">or_expected_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># OR outputs</span>
+
+
+<span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">or_expected_outputs</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/32df0f3f9572998635e91241ea176e91dd6d271988b24d16ca813b4e66d26a9e.png" src="_images/32df0f3f9572998635e91241ea176e91dd6d271988b24d16ca813b4e66d26a9e.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 54 updates
+Input: [0 0], Output: 0
+Input: [0 1], Output: 1
+Input: [1 0], Output: 1
+Input: [1 1], Output: 1
+Final weights: [ 0.43839299  0.08460341 -0.01589235]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="let-s-repeat-our-training-to-see-how-consistent-the-results-are">
+<h2>Let’s repeat our training to see how consistent the results are<a class="headerlink" href="#let-s-repeat-our-training-to-see-how-consistent-the-results-are" title="Link to this heading">#</a></h2>
+<p>To get a sense of how general and variable the solutions are, we could run this multiple times, save the resulting weights, and then just print them in a table. Wait for this to run (it runs 10 times, which takes about a minute), and then you’ll get a table showing the results from each run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Initialize the list to store successful weights</span>
+<span class="n">successful_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Run the training 10 times</span>
+<span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">or_expected_outputs</span><span class="p">,</span> <span class="n">ptitle</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Run </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                              <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># Separate the larger and smaller weights and append them with the bias</span>
+    <span class="n">larger_weight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">smaller_weight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">successful_weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">larger_weight</span><span class="p">,</span> <span class="n">smaller_weight</span><span class="p">,</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create a DataFrame with columns for larger weight, smaller weight, and bias</span>
+<span class="n">weights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">successful_weights</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Larger_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Smaller_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias&#39;</span><span class="p">])</span>
+
+<span class="c1"># Calculate the mean of the larger and smaller weights separately, along with the bias</span>
+<span class="n">mean_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">weights_df</span><span class="o">.</span><span class="n">mean</span><span class="p">()],</span> <span class="n">columns</span><span class="o">=</span><span class="n">weights_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">mean_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean&#39;</span><span class="p">]</span>
+
+<span class="c1"># Concatenate the mean row to the DataFrame</span>
+<span class="n">weights_df_with_mean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">weights_df</span><span class="p">,</span> <span class="n">mean_weights</span><span class="p">])</span>
+<span class="n">weights_df_with_mean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d5048b25f4f6c07839b831364b1c06081d41a2e36f50b4bbbdda655ac9133a0a.png" src="_images/d5048b25f4f6c07839b831364b1c06081d41a2e36f50b4bbbdda655ac9133a0a.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 6 updates
+Input: [0 0], Output: 0
+Input: [0 1], Output: 1
+Input: [1 0], Output: 1
+Input: [1 1], Output: 1
+Final weights: [ 0.98912769  0.92133234 -0.06275235]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Larger_Weight</th>
+      <th>Smaller_Weight</th>
+      <th>Bias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.630315</td>
+      <td>0.208848</td>
+      <td>-0.073086</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.791432</td>
+      <td>0.410220</td>
+      <td>-0.229673</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.432263</td>
+      <td>0.637311</td>
+      <td>-0.140034</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.721879</td>
+      <td>0.109916</td>
+      <td>-0.071541</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2.675893</td>
+      <td>0.650536</td>
+      <td>-0.347845</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>3.948524</td>
+      <td>1.739874</td>
+      <td>-0.683969</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.624623</td>
+      <td>0.601746</td>
+      <td>-0.357587</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>1.354128</td>
+      <td>0.204077</td>
+      <td>-0.170022</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.960227</td>
+      <td>0.725115</td>
+      <td>-0.199289</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.989128</td>
+      <td>0.921332</td>
+      <td>-0.062752</td>
+    </tr>
+    <tr>
+      <th>Mean</th>
+      <td>1.512841</td>
+      <td>0.620897</td>
+      <td>-0.233580</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lab-question-2">
+<h2><font color='red'>Lab question 2</font><a class="headerlink" href="#lab-question-2" title="Link to this heading">#</a></h2>
+<p><em>Answer these as 2.1, 2.2, and 2.3</em></p>
+<ol class="arabic simple">
+<li><p>What weights did you get for the 10 trained networks (just report the mean values)? Compare them to the weights we used in the previous notebook when we set weights for Inputs to Output and Bias to Output. Explain why these learned weights work, and how they relate to our hand-set weights.</p></li>
+<li><p>Describe the decision boundary.</p></li>
+<li><p>Insert a new code block and copy the code from the block above. Then do 10 runs with the AND network by putting in the following line in place of the <code class="docutils literal notranslate"><span class="pre">or_wts</span> <span class="pre">=</span> <span class="pre">...</span></code> line: <code class="docutils literal notranslate"><span class="pre">or_wts</span> <span class="pre">=</span> <span class="pre">train_perceptron(inputs,</span> <span class="pre">or_expected_outputs,</span> <span class="pre">learning_rate=0.1,</span> <span class="pre">sd=2.0,</span> <span class="pre">try_updates=50,</span> <span class="pre">max_updates=4000,</span> <span class="pre">rseed=None)</span></code>. Also change the line <code class="docutils literal notranslate"><span class="pre">successful_weights.append(or_wts)</span></code> to <code class="docutils literal notranslate"><span class="pre">successful_weights.append(or_wts)</span></code>. Report the means you get. Include a screenshot of the table. <em>If you get stuck on this, contact me.</em></p></li>
+</ol>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Initialize the list to store successful weights</span>
+<span class="n">successful_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Run the training 10 times</span>
+<span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">or_expected_outputs</span><span class="p">,</span> <span class="n">ptitle</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Run </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                              <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># Separate the larger and smaller weights and append them with the bias</span>
+    <span class="n">larger_weight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">smaller_weight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">successful_weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">larger_weight</span><span class="p">,</span> <span class="n">smaller_weight</span><span class="p">,</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create a DataFrame with columns for larger weight, smaller weight, and bias</span>
+<span class="n">weights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">successful_weights</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Larger_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Smaller_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias&#39;</span><span class="p">])</span>
+
+<span class="c1"># Calculate the mean of the larger and smaller weights separately, along with the bias</span>
+<span class="n">mean_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">weights_df</span><span class="o">.</span><span class="n">mean</span><span class="p">()],</span> <span class="n">columns</span><span class="o">=</span><span class="n">weights_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">mean_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean&#39;</span><span class="p">]</span>
+
+<span class="c1"># Concatenate the mean row to the DataFrame</span>
+<span class="n">weights_df_with_mean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">weights_df</span><span class="p">,</span> <span class="n">mean_weights</span><span class="p">])</span>
+<span class="n">weights_df_with_mean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b88e8f0bf7199922d581da548c959cce40be22dbc20aef3434d79da42d90922e.png" src="_images/b88e8f0bf7199922d581da548c959cce40be22dbc20aef3434d79da42d90922e.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 16 updates
+Input: [0 0], Output: 0
+Input: [0 1], Output: 0
+Input: [1 0], Output: 0
+Input: [1 1], Output: 1
+Final weights: [ 0.90649836  0.20658283 -1.01616019]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Larger_Weight</th>
+      <th>Smaller_Weight</th>
+      <th>Bias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.516621</td>
+      <td>0.636353</td>
+      <td>-1.978279</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.835243</td>
+      <td>0.660074</td>
+      <td>-1.382499</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.676343</td>
+      <td>0.543187</td>
+      <td>-1.041944</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.157331</td>
+      <td>1.144754</td>
+      <td>-1.273730</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.363631</td>
+      <td>0.204561</td>
+      <td>-0.395459</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1.365263</td>
+      <td>1.049440</td>
+      <td>-2.045998</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.838306</td>
+      <td>0.250599</td>
+      <td>-0.955308</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.446168</td>
+      <td>0.183165</td>
+      <td>-0.581386</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2.837049</td>
+      <td>0.921149</td>
+      <td>-3.434716</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.906498</td>
+      <td>0.206583</td>
+      <td>-1.016160</td>
+    </tr>
+    <tr>
+      <th>Mean</th>
+      <td>1.094245</td>
+      <td>0.579987</td>
+      <td>-1.410548</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="training-a-nand-network">
+<h2>Training a NAND network<a class="headerlink" href="#training-a-nand-network" title="Link to this heading">#</a></h2>
+<p>Now let’s see if we can train an NAND network. Let’s do it 10 times.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">nor_expected_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># NAND outputs</span>
+
+<span class="c1"># Initialize the list to store successful weights</span>
+<span class="n">successful_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Run the training 10 times</span>
+<span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">nor_expected_outputs</span><span class="p">,</span> <span class="n">ptitle</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Run </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                              <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># Separate the larger and smaller weights and append them with the bias</span>
+    <span class="n">larger_weight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">smaller_weight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">successful_weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">larger_weight</span><span class="p">,</span> <span class="n">smaller_weight</span><span class="p">,</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create a DataFrame with columns for larger weight, smaller weight, and bias</span>
+<span class="n">weights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">successful_weights</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Larger_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Smaller_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias&#39;</span><span class="p">])</span>
+
+<span class="c1"># Calculate the mean of the larger and smaller weights separately, along with the bias</span>
+<span class="n">mean_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">weights_df</span><span class="o">.</span><span class="n">mean</span><span class="p">()],</span> <span class="n">columns</span><span class="o">=</span><span class="n">weights_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">mean_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean&#39;</span><span class="p">]</span>
+
+<span class="c1"># Concatenate the mean row to the DataFrame</span>
+<span class="n">weights_df_with_mean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">weights_df</span><span class="p">,</span> <span class="n">mean_weights</span><span class="p">])</span>
+<span class="n">weights_df_with_mean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/09efa9a014b0f3a9eede34f70d110428d3c310d31b7e347116dd502f5fecf3ad.png" src="_images/09efa9a014b0f3a9eede34f70d110428d3c310d31b7e347116dd502f5fecf3ad.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged after 22 updates
+Input: [0 0], Output: 1
+Input: [0 1], Output: 1
+Input: [1 0], Output: 1
+Input: [1 1], Output: 0
+Final weights: [-1.22413665 -0.47133561  1.39118299]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Larger_Weight</th>
+      <th>Smaller_Weight</th>
+      <th>Bias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.601489</td>
+      <td>-0.879264</td>
+      <td>1.207535</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.350204</td>
+      <td>-1.455579</td>
+      <td>2.031512</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.329384</td>
+      <td>-0.646417</td>
+      <td>0.896649</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.423631</td>
+      <td>-0.445284</td>
+      <td>0.818269</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.429406</td>
+      <td>-1.246337</td>
+      <td>1.320058</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.290631</td>
+      <td>-0.620741</td>
+      <td>0.693958</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.967897</td>
+      <td>-1.212021</td>
+      <td>1.684719</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-1.357973</td>
+      <td>-1.521999</td>
+      <td>1.782697</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.638012</td>
+      <td>-0.840178</td>
+      <td>1.362379</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-0.471336</td>
+      <td>-1.224137</td>
+      <td>1.391183</td>
+    </tr>
+    <tr>
+      <th>Mean</th>
+      <td>-0.685996</td>
+      <td>-1.009196</td>
+      <td>1.318896</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lab-question-3">
+<h2><font color='red'>Lab question 3</font><a class="headerlink" href="#lab-question-3" title="Link to this heading">#</a></h2>
+<p><em>Answer these as 3.1 and 3.2</em></p>
+<ol class="arabic simple">
+<li><p>What weights did you get for the 10 trained networks (just report the mean values)? Compare them to the weights we used in the previous notebook when we set weights for Inputs to Output and Bias to Output. Explain why these learned weights work, and how they relate to our hand-set weights.</p></li>
+<li><p>Describe the decision boundary.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="training-an-xor-network">
+<h2>Training an XOR network…?<a class="headerlink" href="#training-an-xor-network" title="Link to this heading">#</a></h2>
+<p>Now let’s see if we can train a XOR network. Let’s do it 3 times (you’ll see why). This will take a couple of minutes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">xor_expected_outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># XOR outputs</span>
+
+<span class="c1"># Initialize the list to store successful weights</span>
+<span class="n">successful_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Run the training just 3 times, since we know it will not converge</span>
+<span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">or_wts</span> <span class="o">=</span> <span class="n">train_perceptron</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">xor_expected_outputs</span><span class="p">,</span> <span class="n">ptitle</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Run </span><span class="si">{</span><span class="n">run</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                              <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">try_updates</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_updates</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># Separate the larger and smaller weights and append them with the bias</span>
+    <span class="n">larger_weight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">smaller_weight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">or_wts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">successful_weights</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">larger_weight</span><span class="p">,</span> <span class="n">smaller_weight</span><span class="p">,</span> <span class="n">or_wts</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create a DataFrame with columns for larger weight, smaller weight, and bias</span>
+<span class="n">weights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">successful_weights</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Larger_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Smaller_Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias&#39;</span><span class="p">])</span>
+
+<span class="c1"># Calculate the mean of the larger and smaller weights separately, along with the bias</span>
+<span class="n">mean_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">weights_df</span><span class="o">.</span><span class="n">mean</span><span class="p">()],</span> <span class="n">columns</span><span class="o">=</span><span class="n">weights_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">mean_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean&#39;</span><span class="p">]</span>
+
+<span class="c1"># Concatenate the mean row to the DataFrame</span>
+<span class="n">weights_df_with_mean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">weights_df</span><span class="p">,</span> <span class="n">mean_weights</span><span class="p">])</span>
+<span class="n">weights_df_with_mean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/271ea2382392136d42ad9702785f367285852c45802d317c7470208b3cec84aa.png" src="_images/271ea2382392136d42ad9702785f367285852c45802d317c7470208b3cec84aa.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Did not converge after 200 updates (max set to 200)
+Input: [0 0], Output: 1
+Input: [0 1], Output: 0
+Input: [1 0], Output: 0
+Input: [1 1], Output: 0
+Final weights: [-0.05380876 -0.05900519  0.03010359]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Larger_Weight</th>
+      <th>Smaller_Weight</th>
+      <th>Bias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.027187</td>
+      <td>-0.066476</td>
+      <td>0.008239</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.024876</td>
+      <td>-0.114177</td>
+      <td>0.020801</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.053809</td>
+      <td>-0.059005</td>
+      <td>0.030104</td>
+    </tr>
+    <tr>
+      <th>Mean</th>
+      <td>-0.035290</td>
+      <td>-0.079886</td>
+      <td>0.019714</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="towards-solving-xor">
+<h2>Towards solving XOR<a class="headerlink" href="#towards-solving-xor" title="Link to this heading">#</a></h2>
+<p>Okay, the problem with XOR is that there is no way to draw a single straight line that divides the space appropriately. Let’s look at it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Plotting the inputs</span>
+<span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">xor_expected_outputs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Output 1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Output 0</span>
+
+<span class="c1"># Annotations and labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;XOR inputs and outputs &#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Input 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Input 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f484d129bac60797247e0a1981bfb5b3793c9fdeddff3d6f633ad671d57cc9ef.png" src="_images/f484d129bac60797247e0a1981bfb5b3793c9fdeddff3d6f633ad671d57cc9ef.png" />
+</div>
+</div>
+</section>
+<section id="what-to-do">
+<h2>What to do?<a class="headerlink" href="#what-to-do" title="Link to this heading">#</a></h2>
+<p>So what are some other things we could do? Can we turn this into a <strong>set</strong> of linear decisions? That is, can we find combinations of simpler logical operators that together correspond to XOR?</p>
+<p>One way to think about this is that we want one thing to be true but another to be false (or two things to be true)… Let’s look at the XOR truth table.</p>
+</section>
+<section id="truth-table-for-xor">
+<h2>Truth table for XOR<a class="headerlink" href="#truth-table-for-xor" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Input A</p></th>
+<th class="head"><p>Input B</p></th>
+<th class="head"><p>Output (A XOR B)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+</tr>
+<tr class="row-odd"><td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>True</p></td>
+</tr>
+<tr class="row-even"><td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+</tr>
+<tr class="row-odd"><td><p>True</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can rewrite this using numbers, where 0 = False and 1 = True.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Input A</p></th>
+<th class="head text-center"><p>Input B</p></th>
+<th class="head text-center"><p>Output (A XOR B)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="make-it-modular">
+<h2>Make it modular<a class="headerlink" href="#make-it-modular" title="Link to this heading">#</a></h2>
+<p>Think about the other functions we have discussed – OR, AND, and NAND. OR is true for every case where XOR is true <em>except</em> for 1,1. Is there another function that can tell us about that specific case?</p>
+<p>Maybe <strong>AND</strong> could help us. We want the cases where OR is true <strong>but</strong> AND is false. Do you see why?</p>
+<p>In other words, we want cases where OR is true and so is NAND (remember, not-AND).</p>
+<p>Examine this table. The last column uses the <span class="math notranslate nohighlight">\(\wedge\)</span> symbol for <strong>AND</strong>, so we are tabulating whether both OR and NAND are true. When both are true, we find the true cases for XOR.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Input A</p></th>
+<th class="head text-center"><p>Input B</p></th>
+<th class="head text-center"><p>OR</p></th>
+<th class="head text-center"><p>AND</p></th>
+<th class="head text-center"><p>NAND</p></th>
+<th class="head text-center"><p>XOR</p></th>
+<th class="head text-center"><p>OR <span class="math notranslate nohighlight">\(\wedge\)</span> NAND</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We know how to make networks that can do OR and NAND. Can we combine them to do XOR by performing an AND operation on their outputs?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">network_plotter</span> <span class="k">as</span> <span class="nn">netplot</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Define the network for XOR function</span>
+<span class="n">layers_xor</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Input 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Input 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias Hid&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Hid 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Hid 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Bias Out&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Output&#39;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="c1"># Set weights for the XOR function</span>
+<span class="n">input_to_hidden1_weights_xor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">input_to_hidden2_weights_xor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+<span class="n">hidden_to_output_weights_xor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="n">bias_to_output_weight</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span>
+
+<span class="c1"># Setup for the network plot</span>
+<span class="n">plot_width</span> <span class="o">=</span> <span class="mf">7.0</span>
+<span class="n">plot_height</span> <span class="o">=</span> <span class="n">plot_width</span>
+<span class="n">fig_width</span> <span class="o">=</span> <span class="n">plot_width</span> <span class="o">*</span> <span class="mf">1.2</span>
+<span class="n">fig_height</span> <span class="o">=</span> <span class="n">fig_width</span>
+<span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">fig_width</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+
+<span class="c1"># Creating the figure for the XOR network</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fig_width</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+
+<span class="c1"># Calculate node positions for the XOR network</span>
+<span class="n">node_positions_xor</span> <span class="o">=</span> <span class="n">netplot</span><span class="o">.</span><span class="n">calculate_node_positions</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">,</span> <span class="n">plot_width</span><span class="p">,</span> <span class="n">fig_width</span><span class="p">,</span> <span class="n">fig_height</span><span class="p">)</span>
+
+<span class="c1"># Draw Neurons with Labels for the XOR network</span>
+<span class="n">num_layers_xor</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">)</span>
+<span class="n">subtext_xor</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">nodetext_xor</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">column</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">node_positions_xor</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+        <span class="n">netplot</span><span class="o">.</span><span class="n">draw_neuron_with_label</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_layers_xor</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">,</span> <span class="n">subtext</span><span class="o">=</span><span class="n">subtext_xor</span><span class="p">,</span> <span class="n">nodetext</span><span class="o">=</span><span class="n">nodetext_xor</span><span class="p">)</span>
+
+<span class="c1"># Draw Connections with Weights for the XOR network</span>
+<span class="c1"># Input to Hidden Layer 1</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">input_node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">input_to_hidden1_weights_xor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">netplot</span><span class="o">.</span><span class="n">draw_connection_with_weight</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">node_positions_xor</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="s1">&#39;Hid 1&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">show_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">)</span>
+
+<span class="c1"># Input to Hidden Layer 2</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">input_node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">input_to_hidden2_weights_xor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">netplot</span><span class="o">.</span><span class="n">draw_connection_with_weight</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">node_positions_xor</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="s1">&#39;Hid 2&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">show_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">)</span>
+
+<span class="c1"># Hidden to Output Layer</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hidden_node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers_xor</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">hidden_to_output_weights_xor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">netplot</span><span class="o">.</span><span class="n">draw_connection_with_weight</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">node_positions_xor</span><span class="p">,</span> <span class="n">hidden_node</span><span class="p">,</span> <span class="s1">&#39;Output&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">show_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_width</span><span class="o">=</span><span class="n">plot_width</span><span class="p">)</span>
+
+<span class="c1"># Adding the connection from Bias to Output</span>
+<span class="c1">#bias_to_output_weight = hidden_to_output_weights_xor[-1]</span>
+<span class="c1">#netplot.draw_connection_with_weight(ax, node_positions_xor, &#39;Bias&#39;, &#39;Output&#39;, bias_to_output_weight, show_weight=True, plot_width=plot_width)</span>
+   
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;XOR network with bias node and hidden layers&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/dea98fb48fc7329ed300df8eab99c76e2b95811c90c5da1d173e511b70169c8e.png" src="_images/dea98fb48fc7329ed300df8eab99c76e2b95811c90c5da1d173e511b70169c8e.png" />
+</div>
+</div>
+</section>
+<section id="evaluating-the-network">
+<h2>Evaluating the network<a class="headerlink" href="#evaluating-the-network" title="Link to this heading">#</a></h2>
+<p>Let’s check that it seems to properly perform XOR.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">step_activation</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">compute_xor_network</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+    <span class="c1"># Unpack weights</span>
+    <span class="n">w_input_hidden1</span><span class="p">,</span> <span class="n">w_input_hidden2</span><span class="p">,</span> <span class="n">w_hidden_output</span> <span class="o">=</span> <span class="n">weights</span>
+
+    <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+        <span class="c1"># Calculate the initial states (sums) for Hid 1 and Hid 2</span>
+        <span class="n">hid1_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">w_input_hidden1</span><span class="p">)</span>
+        <span class="n">hid2_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">w_input_hidden2</span><span class="p">)</span>
+
+        <span class="c1"># Apply step activation function to get the final output values for Hid 1 and Hid 2</span>
+        <span class="n">hid1_output</span> <span class="o">=</span> <span class="n">step_activation</span><span class="p">(</span><span class="n">hid1_sum</span><span class="p">)</span>
+        <span class="n">hid2_output</span> <span class="o">=</span> <span class="n">step_activation</span><span class="p">(</span><span class="n">hid2_sum</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the raw input to the Output node</span>
+        <span class="n">output_sum</span> <span class="o">=</span> <span class="n">hid1_output</span> <span class="o">*</span> <span class="n">w_hidden_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hid2_output</span> <span class="o">*</span> <span class="n">w_hidden_output</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">w_hidden_output</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># Apply step function to get the final Output value</span>
+        <span class="n">final_output</span> <span class="o">=</span> <span class="n">step_activation</span><span class="p">(</span><span class="n">output_sum</span><span class="p">)</span>
+
+        <span class="c1"># Print the input values, raw and stepped values for Hid 1, Hid 2, and Output</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="nb">input</span><span class="si">}</span><span class="s2">, Hid 1: (</span><span class="si">{</span><span class="n">hid1_sum</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hid1_output</span><span class="si">}</span><span class="s2">), Hid 2: (</span><span class="si">{</span><span class="n">hid2_sum</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hid2_output</span><span class="si">}</span><span class="s2">), Output: (</span><span class="si">{</span><span class="n">output_sum</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">final_output</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Inputs and weights remain the same as the previous example</span>
+<span class="n">weights_xor</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">input_to_hidden1_weights_xor</span><span class="p">,</span>
+    <span class="n">input_to_hidden2_weights_xor</span><span class="p">,</span> 
+    <span class="n">hidden_to_output_weights_xor</span>
+<span class="p">]</span>
+
+<span class="c1"># Running the XOR network with the corrected logic</span>
+<span class="n">compute_xor_network</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">weights_xor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Input: [0 0 1], Hid 1: (-0.5, 0), Hid 2: (1.5, 1), Output: (-0.5, 0)
+Input: [0 1 1], Hid 1: (0.5, 1), Hid 2: (0.5, 1), Output: (0.5, 1)
+Input: [1 0 1], Hid 1: (0.5, 1), Hid 2: (0.5, 1), Output: (0.5, 1)
+Input: [1 1 1], Hid 1: (1.5, 1), Hid 2: (-0.5, 0), Output: (-0.5, 0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>It works!</p>
+</section>
+<hr class="docutils" />
+<section id="lab-question-4">
+<h2><font color='red'>Lab question 4</font><a class="headerlink" href="#lab-question-4" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Explain why these weights work. What function does Hid 1 implement (via its incoming connections)?  What function does Hid 2 implement? What function does the Output node perform on its inputs from Hid 1 and Hid 2?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="lab-question-5-challenge-questions">
+<h2><font color='red'>Lab question 5: Challenge questions</font><a class="headerlink" href="#lab-question-5-challenge-questions" title="Link to this heading">#</a></h2>
+<p>Grad students &amp; honors students: try at least one of these.</p>
+<ol class="arabic simple">
+<li><p>Can you come up with a different combination of functions to solve XOR? Construct the network and set the weights and biases. Test it either by working it out by hand or writing some python code to do it.</p></li>
+<li><p>Can you take the XOR network above and restructure it? For example, can you find a solution that leaves out one of the Bias nodes? You can add nodes to the hidden layer, or even add a second hidden layer.</p></li>
+</ol>
+<hr class="docutils" />
+<section id="we-are-going-to-need-another-approach-to-train-a-network-to-do-xor-that-s-what-we-will-do-in-the-next-notebook-nnets-03">
+<h3>We are going to need another approach to train a network to do XOR. That’s what we will do in the next notebook (nnets-03).<a class="headerlink" href="#we-are-going-to-need-another-approach-to-train-a-network-to-do-xor-that-s-what-we-will-do-in-the-next-notebook-nnets-03" title="Link to this heading">#</a></h3>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_nnets-01-linear-functions-and-bias.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Neural networks, Part 1: Linear logic functions as networks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="13_nnets-03-learning-xor.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Neural networks, Part 3 – training networks for non-linearly separable mappings</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Neural networks, Part 2 – training networks</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networks-that-learn">Networks that learn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perceptron-learning-rule">Perceptron Learning Rule</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearly-separable-mapping">Linearly Separable Mapping</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characteristics">Characteristics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#importance-in-machine-learning">Importance in Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-and">Learning AND</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-network">Plot the network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-1"><font color="red">Lab question 1</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-an-or-network">Training an OR network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-repeat-our-training-to-see-how-consistent-the-results-are">Let’s repeat our training to see how consistent the results are</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-2"><font color="red">Lab question 2</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-nand-network">Training a NAND network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-3"><font color="red">Lab question 3</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-an-xor-network">Training an XOR network…?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#towards-solving-xor">Towards solving XOR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-do">What to do?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#truth-table-for-xor">Truth table for XOR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-it-modular">Make it modular</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-the-network">Evaluating the network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-4"><font color="red">Lab question 4</font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lab-question-5-challenge-questions"><font color="red">Lab question 5: Challenge questions</font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#we-are-going-to-need-another-approach-to-train-a-network-to-do-xor-that-s-what-we-will-do-in-the-next-notebook-nnets-03">We are going to need another approach to train a network to do XOR. That’s what we will do in the next notebook (nnets-03).</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,323 @@
+Traceback (most recent call last):
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_cache\executors\utils.py", line 58, in single_nb_execution
+    executenb(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_core\utils\__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\asyncio\base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# enable animation in jupyter 
+%matplotlib widget
+
+# Importing necessary libraries
+import numpy as np                  # NumPy for numerical operations, such as handling arrays
+import matplotlib.pyplot as plt     # pyplot for plotting and visualizing data
+import matplotlib.animation as animation # Animation module for creating animations
+import ipywidgets as widgets        # For creating interactive widgets in Jupyter notebooks
+from IPython.display import display # For rendering widgets in Jupyter notebooks
+#from collections import deque       # For using double-ended queues, necessary for history
+
+# Function to initialize the grid with given rows, columns, and initial live cells
+def initialize_grid(rows, cols, initial_cells):
+    grid = np.zeros((rows, cols)) # Creating a grid of zeros
+    
+    # Choosing random cells to be alive based on user-settable parameter, initial_cells
+    initial_cells_coords = np.random.choice(rows * cols, initial_cells, replace=False) 
+    
+    # Marking the chosen cells as alive
+    grid[np.unravel_index(initial_cells_coords, (rows, cols))] = 1 
+    return grid
+
+def update_grid(grid):
+    ''' 
+        Note you can use 3 ' marks to start and end an extended comment.
+    
+        Function to update the grid based on the rules of Conway's Game of Life
+
+        Implements the rules of Conway's Game of Life, a cellular automaton devised by 
+        mathematician John Conway. The game is played on an 'infinite' grid of cells 
+        ('infinite' because interactions occur across edges -- cells on right & left edges are 
+        neighbors and influence each other, and top and bottom edge cells are neighbors; 
+        this can also be described as using 'periodic boundary conditions'; i.e., the wrapping 
+        grid forms a torus). 
+
+        Each cell is in one of two possible states: alive (1, filled) or dead (0, empty).
+
+        Each cell consults the states of its eight neighbors (horizontal, vertical, and 
+        diagonal) and its own state is updated based on the following rules:
+
+          1. Underpopulation: Any live cell with fewer than two live neighbors dies, as if by 
+             underpopulation.
+          2. Continuation: Any live cell with two or three live neighbors lives on to the next 
+             'generation' (time step).
+          3. Overpopulation: Any live cell with more than three live neighbors dies, as if by 
+             overpopulation.
+          4. Reproduction: Any dead cell with exactly three live neighbors becomes a live cell, 
+             as if by reproduction.
+
+        The function takes the current grid states as input and returns a new grid representing 
+        the next state. 
+    '''
+
+    new_grid = grid.copy() # Creating a copy of the current grid
+    rows, cols = grid.shape # Getting the grid shape (dimensions)
+    for i in range(rows):
+        for j in range(cols):
+            
+            # Calculating the total number of alive neighbors for the cell grid(i, j);
+            # we need to check the states of the 8 cells around cell i,j:
+            #
+            # 1 [i, (j-1)%cols]: Left neighbor; wraps if at left edge
+            # 2 [i, (j+1)%cols]: Right neighbor; wraps if at right edge
+            # 3 [(i-1)%rows, j]: Top neighbor; wraps if at top edge
+            # 4 [(i+1)%rows, j]: Bottom neighbor; wraps if at bottom edge
+            # 5 [(i-1)%rows, (j-1)%cols]: Top-left diagonal; wraps if at (grid) corner
+            # 6 [(i-1)%rows, (j+1)%cols]: Top-right diagonal; wraps if at corner
+            # 7 [(i+1)%rows, (j-1)%cols]: Bottom-left diagonal; wraps if at corner
+            # 8 [(i+1)%rows, (j+1)%cols]: Bottom-right diagonal; wraps if at corner
+            #
+            # The values are added together to count living neighbors. The use of the 
+            # modulo operation (%) ensures that the grid behaves as a torus, 
+            # allowing cells on the edges of the grid to consider cells on the 
+            # opposite edge as neighbors.
+
+            total = int((grid[i, (j-1)%cols] + grid[i, (j+1)%cols] +
+                         grid[(i-1)%rows, j] + grid[(i+1)%rows, j] +
+                         grid[(i-1)%rows, (j-1)%cols] + grid[(i-1)%rows, (j+1)%cols] +
+                         grid[(i+1)%rows, (j-1)%cols] + grid[(i+1)%rows, (j+1)%cols]))
+
+            # Implementing the rules of Conway's Game of Life
+
+            # Rules 1 (die if < 2 neighbors) & 3 (die if > 3 neighbors)
+            if grid[i, j] == 1 and (total < 2 or total > 3): 
+                new_grid[i, j] = 0 # 0 = dead, will be empty in plot
+            # Rule 4: Dead cell with 3 live neighbors becomes a live cell                
+            elif grid[i, j] == 0 and total == 3: 
+                new_grid[i, j] = 1 # 1 = live, will be filled in plot
+            #################    
+            # To think about: why don't we need an explicit statement for Rule 2?
+            #################
+            
+    # return updated states of cells            
+    return new_grid
+
+# Class to handle the Game of Life animation
+class GameOfLifeAnimation:
+    def __init__(self):
+        # Creating input widgets for user to define the grid properties
+        self.rows_text = widgets.Text(value='100', description='Rows:')
+        self.cols_text = widgets.Text(value='100', description='Cols:')
+        self.initial_cells_text = widgets.Text(value='1000', description='Initial Cells:')
+        self.history_text = widgets.Text(value='10', description='History:')
+        self.timesteps_text = widgets.Text(value='200', description='Timesteps:')
+        self.interval_text = widgets.Text(value='10', description='Interval (ms):')
+
+        # These set the default proportions of the 'display' where the grid will appear.
+        # You can make the plot larger or smaller with this, or by looking for the dragable
+        # grey corner to the bottom left of the plot window. 
+        plot_width = 6
+        plot_height = 6
+        
+        fig, ax = plt.subplots(figsize=(plot_width, plot_height)) # Creating plot area
+        self.ax = ax
+        plt.axis('on') # plot border around plot area
+        plt.xticks([]) # do not plot x ticks
+        plt.yticks([]) # do not plot y ticks
+
+        # Initializing variables for the animation
+        self.animation = None
+        self.paused = False
+        #self.history = deque(maxlen=int(self.history_text.value)) # Using deque to store history of states
+        self.history = []
+        self.current_timestep = 0
+
+        # Creating buttons to start, pause, move forward, and move back in the simulation
+        self.start_button = widgets.Button(description="Start")
+        self.start_button.on_click(self.start)
+        self.pause_button = widgets.Button(description="Pause")
+        self.pause_button.on_click(self.toggle_pause)
+        self.forward_button = widgets.Button(description="Forward")
+        self.forward_button.on_click(self.forward)
+        self.back_button = widgets.Button(description="Back")
+        self.back_button.on_click(self.back)
+
+        # Displaying the widgets
+        display(self.rows_text, self.cols_text, self.initial_cells_text, self.history_text,
+                self.interval_text, self.timesteps_text, self.start_button, self.pause_button,
+                self.forward_button, self.back_button)
+
+    # Function to start the animation
+    def start(self, b):
+        self.current_timestep = 0
+        rows = int(self.rows_text.value)
+        cols = int(self.cols_text.value)
+        initial_cells = int(self.initial_cells_text.value)
+        self.history = []
+        #self.history = deque(maxlen=int(self.history_text.value))
+        self.grid = initialize_grid(rows, cols, initial_cells)
+        self.history.append(self.grid.copy())
+        self.ax.clear()
+        plt.axis('on')
+        plt.xticks([])
+        plt.yticks([])
+        plt.xlim(-0.5, cols - 0.5)
+        plt.ylim(rows - 0.5, -0.5)
+        self.im = plt.imshow(self.grid, cmap="binary")
+        plt.gca().add_patch(plt.Rectangle((-0.5, -0.5), cols, rows, linewidth=1, edgecolor="lightblue", facecolor="none"))
+        self.animation = animation.FuncAnimation(plt.gcf(), self.update, frames=int(self.timesteps_text.value), interval=int(self.interval_text.value), blit=True, repeat=False)
+        plt.show()
+
+    # Function to continue the animation
+    def continue_animation(self, b):
+        if self.current_timestep < self.total_timesteps:
+            additional_timesteps = int(self.timesteps_text.value)
+            self.total_timesteps += additional_timesteps
+            self.animation = animation.FuncAnimation(plt.gcf(), 
+                                                     self.update, 
+                                                     frames=self.total_timesteps, 
+                                                     interval=int(self.interval_text.value), 
+                                                     blit=True, repeat=False)
+            plt.show()
+
+    # Function to pause or resume the animation
+    def toggle_pause(self, b):
+        if self.current_timestep >= int(self.timesteps_text.value) - 1:
+            return
+        if self.animation:
+            if self.paused:
+                self.animation.event_source.start()
+                self.pause_button.description = "Pause"
+            else:
+                self.animation.event_source.stop()
+                self.pause_button.description = "Resume"
+            self.paused = not self.paused
+
+    # Function to move one step forward in the simulation
+    def forward(self, b):
+        if self.grid is not None and self.current_timestep < int(self.timesteps_text.value):
+            self.grid = update_grid(self.grid)
+            self.history.append(self.grid.copy())  # Add the new state to history
+            
+            # Enforce maximum length of history
+            if len(self.history) > int(self.history_text.value):
+                self.history.pop(0)
+                
+            self.im.set_array(self.grid)
+            plt.draw()
+            self.current_timestep += 1
+            self.update_title()
+
+    # Function to move one step back in the simulation
+    def back(self, b):
+        if self.history:
+            self.history.pop()  # Remove the latest state from history
+            if self.history:
+                self.grid = self.history[-1].copy()
+                self.im.set_array(self.grid)
+                plt.draw()
+                self.current_timestep -= 1
+                self.update_title()
+
+    # Function to update the animation frame
+    def update(self, i):
+        if i >= int(self.timesteps_text.value):
+            self.animation.event_source.stop()
+            return (self.im,)
+        
+        self.grid = update_grid(self.grid)
+        self.history.append(self.grid.copy())  # Add the new state to history
+        
+        # Enforce maximum length of history
+        if len(self.history) > int(self.history_text.value):
+            self.history.pop(0)
+
+        self.current_timestep = i
+        self.update_title()
+        self.im.set_array(self.grid)
+        return (self.im,)
+    
+    # Function to update the title of the plot
+    def update_title(self):
+        self.ax.set_title(f"Conway's Game of Life - Timestep {self.current_timestep}")
+
+# Creating an instance of the GameOfLifeAnimation class to start the simulation
+game_of_life_anim = GameOfLifeAnimation()
+------------------
+
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mRuntimeError[0m                              Traceback (most recent call last)
+File [1;32m~\anaconda3\Lib\site-packages\matplotlib\backends\registry.py:413[0m, in [0;36mBackendRegistry.resolve_gui_or_backend[1;34m(self, gui_or_backend)[0m
+[0;32m    412[0m [38;5;28;01mtry[39;00m:
+[1;32m--> 413[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39mresolve_backend(gui_or_backend)
+[0;32m    414[0m [38;5;28;01mexcept[39;00m [38;5;167;01mException[39;00m:  [38;5;66;03m# KeyError ?[39;00m
+
+File [1;32m~\anaconda3\Lib\site-packages\matplotlib\backends\registry.py:375[0m, in [0;36mBackendRegistry.resolve_backend[1;34m(self, backend)[0m
+[0;32m    374[0m [38;5;28;01mif[39;00m gui [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[1;32m--> 375[0m     [38;5;28;01mraise[39;00m [38;5;167;01mRuntimeError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124m'[39m[38;5;132;01m{[39;00mbackend[38;5;132;01m}[39;00m[38;5;124m'[39m[38;5;124m is not a recognised backend name[39m[38;5;124m"[39m)
+[0;32m    377[0m [38;5;28;01mreturn[39;00m backend, gui [38;5;28;01mif[39;00m gui [38;5;241m!=[39m [38;5;124m"[39m[38;5;124mheadless[39m[38;5;124m"[39m [38;5;28;01melse[39;00m [38;5;28;01mNone[39;00m
+
+[1;31mRuntimeError[0m: 'widget' is not a recognised backend name
+
+During handling of the above exception, another exception occurred:
+
+[1;31mRuntimeError[0m                              Traceback (most recent call last)
+Cell [1;32mIn[1], line 2[0m
+[0;32m      1[0m [38;5;66;03m# enable animation in jupyter [39;00m
+[1;32m----> 2[0m get_ipython()[38;5;241m.[39mrun_line_magic([38;5;124m'[39m[38;5;124mmatplotlib[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mwidget[39m[38;5;124m'[39m)
+[0;32m      4[0m [38;5;66;03m# Importing necessary libraries[39;00m
+[0;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m                  [38;5;66;03m# NumPy for numerical operations, such as handling arrays[39;00m
+
+File [1;32m~\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py:2480[0m, in [0;36mInteractiveShell.run_line_magic[1;34m(self, magic_name, line, _stack_depth)[0m
+[0;32m   2478[0m     kwargs[[38;5;124m'[39m[38;5;124mlocal_ns[39m[38;5;124m'[39m] [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mget_local_scope(stack_depth)
+[0;32m   2479[0m [38;5;28;01mwith[39;00m [38;5;28mself[39m[38;5;241m.[39mbuiltin_trap:
+[1;32m-> 2480[0m     result [38;5;241m=[39m fn([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)
+[0;32m   2482[0m [38;5;66;03m# The code below prevents the output from being displayed[39;00m
+[0;32m   2483[0m [38;5;66;03m# when using magics with decorator @output_can_be_silenced[39;00m
+[0;32m   2484[0m [38;5;66;03m# when the last Python token in the expression is a ';'.[39;00m
+[0;32m   2485[0m [38;5;28;01mif[39;00m [38;5;28mgetattr[39m(fn, magic[38;5;241m.[39mMAGIC_OUTPUT_CAN_BE_SILENCED, [38;5;28;01mFalse[39;00m):
+
+File [1;32m~\anaconda3\Lib\site-packages\IPython\core\magics\pylab.py:103[0m, in [0;36mPylabMagics.matplotlib[1;34m(self, line)[0m
+[0;32m     98[0m     [38;5;28mprint[39m(
+[0;32m     99[0m         [38;5;124m"[39m[38;5;124mAvailable matplotlib backends: [39m[38;5;132;01m%s[39;00m[38;5;124m"[39m
+[0;32m    100[0m         [38;5;241m%[39m _list_matplotlib_backends_and_gui_loops()
+[0;32m    101[0m     )
+[0;32m    102[0m [38;5;28;01melse[39;00m:
+[1;32m--> 103[0m     gui, backend [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mshell[38;5;241m.[39menable_matplotlib(args[38;5;241m.[39mgui)
+[0;32m    104[0m     [38;5;28mself[39m[38;5;241m.[39m_show_matplotlib_backend(args[38;5;241m.[39mgui, backend)
+
+File [1;32m~\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py:3665[0m, in [0;36mInteractiveShell.enable_matplotlib[1;34m(self, gui)[0m
+[0;32m   3662[0m     [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib_inline[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbackend_inline[39;00m
+[0;32m   3664[0m [38;5;28;01mfrom[39;00m [38;5;21;01mIPython[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcore[39;00m [38;5;28;01mimport[39;00m pylabtools [38;5;28;01mas[39;00m pt
+[1;32m-> 3665[0m gui, backend [38;5;241m=[39m pt[38;5;241m.[39mfind_gui_and_backend(gui, [38;5;28mself[39m[38;5;241m.[39mpylab_gui_select)
+[0;32m   3667[0m [38;5;28;01mif[39;00m gui [38;5;241m!=[39m [38;5;28;01mNone[39;00m:
+[0;32m   3668[0m     [38;5;66;03m# If we have our first gui selection, store it[39;00m
+[0;32m   3669[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mpylab_gui_select [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+
+File [1;32m~\anaconda3\Lib\site-packages\IPython\core\pylabtools.py:349[0m, in [0;36mfind_gui_and_backend[1;34m(gui, gui_select)[0m
+[0;32m    347[0m [38;5;28;01melse[39;00m:
+[0;32m    348[0m     gui [38;5;241m=[39m _convert_gui_to_matplotlib(gui)
+[1;32m--> 349[0m     backend, gui [38;5;241m=[39m backend_registry[38;5;241m.[39mresolve_gui_or_backend(gui)
+[0;32m    351[0m gui [38;5;241m=[39m _convert_gui_from_matplotlib(gui)
+[0;32m    352[0m [38;5;28;01mreturn[39;00m gui, backend
+
+File [1;32m~\anaconda3\Lib\site-packages\matplotlib\backends\registry.py:415[0m, in [0;36mBackendRegistry.resolve_gui_or_backend[1;34m(self, gui_or_backend)[0m
+[0;32m    413[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39mresolve_backend(gui_or_backend)
+[0;32m    414[0m [38;5;28;01mexcept[39;00m [38;5;167;01mException[39;00m:  [38;5;66;03m# KeyError ?[39;00m
+[1;32m--> 415[0m     [38;5;28;01mraise[39;00m [38;5;167;01mRuntimeError[39;00m(
+[0;32m    416[0m         [38;5;124mf[39m[38;5;124m"[39m[38;5;124m'[39m[38;5;132;01m{[39;00mgui_or_backend[38;5;132;01m}[39;00m[38;5;124m is not a recognised GUI loop or backend name[39m[38;5;124m"[39m)
+
+[1;31mRuntimeError[0m: 'widget is not a recognised GUI loop or backend name
+

@@ -1,0 +1,86 @@
+Traceback (most recent call last):
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_cache\executors\utils.py", line 58, in single_nb_execution
+    executenb(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\jupyter_core\utils\__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\asyncio\base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\BK\anaconda3\Lib\site-packages\nbclient\client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import network_plotter as netplot
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Setup for the AND network plot
+plot_width = 10.0
+plot_height = plot_width
+fig_width = plot_width * 1.2
+fig_height = fig_width
+figsize = (fig_width, fig_height)
+
+# Define the network for the AND function
+layers_and = [
+    ['Input 1', 'Input 2', 'Bias'],
+    ['Output']
+]
+
+# Set weights for the AND function
+# Both inputs need to be 1 to exceed the threshold of 1.5
+#input_to_output_weights_and = np.array([1.0, 1.0, -1.5])
+
+# Instead of setting the weights, we will use the ones we just got from training. 
+input_to_output_weights_and = or_wts
+
+
+# Creating the figure for the AND network
+fig, ax = plt.subplots(figsize=figsize)
+ax.set_xlim(0, fig_width)
+ax.set_ylim(0, fig_height)
+ax.set_aspect('equal', adjustable='box')
+
+# Calculate node positions for the AND network
+node_positions_and = netplot.calculate_node_positions(layers_and, plot_width, fig_width, fig_height)
+
+# Draw Neurons with Labels for the AND network
+num_layers_and = len(layers_and)
+subtext_and = ''
+nodetext_and = ''
+for i, column in enumerate(layers_and):
+    for node in column:
+        pos = node_positions_and[node]
+        # if i == num_layers_and - 1:
+        #     subtext_and = 'Threshold: 1.5'
+        netplot.draw_neuron_with_label(ax, pos, node, i, num_layers_and, plot_width=plot_width, subtext=subtext_and, nodetext=nodetext_and)
+
+# Draw Connections with Weights for the AND network
+for i, input_node in enumerate(layers_and[0]):
+    weight = input_to_output_weights_and[i]
+    netplot.draw_connection_with_weight(ax, node_positions_and, input_node, 'Output', weight, show_weight=True, plot_width=plot_width)
+
+plt.title('AND network with bias node and trained weights', x=0.5, y=0.85)
+plt.axis('off')
+plt.show()
+
+------------------
+
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [1;32mIn[3], line 1[0m
+[1;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mnetwork_plotter[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnetplot[39;00m
+[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
+[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m [38;5;28;01mas[39;00m [38;5;21;01mplt[39;00m
+
+[1;31mModuleNotFoundError[0m: No module named 'network_plotter'
+

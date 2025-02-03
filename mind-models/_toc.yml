@@ -1,0 +1,24 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: README
+
+chapters:
+  - file: 00_python-jupyter-overview
+  - file: 01_game-of-life
+  - file: 02a_math-probability-matching
+  - file: 02b_math-probability-matching
+  - file: 03_agent-probability-matching
+  - file: 04_probability-review
+  - file: 05_bayes-theorem
+  - file: 05_bayes-theorem-rev
+  - file: 06_pseudo-swr-analysis
+  - file: 07_swr-bayes-004
+  - file: 07b_alternative-with-features
+  - file: 08_trace-swr
+  - file: 10_netsci-01
+  - file: 11_nnets-01-linear-functions-and-bias
+  - file: 12_nnets-02-training-linear-networks
+  - file: 13_nnets-03-learning-xor
+  - file: 14_nnets-04-srn-statlearn
